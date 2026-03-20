@@ -1,80 +1,99 @@
 body {
-  background: #0a0f1f;
+  background: radial-gradient(circle at top, #0a0f1f, #050814);
   color: white;
   text-align: center;
-  font-family: sans-serif;
+  font-family: 'Segoe UI', sans-serif;
 }
 
 h1 {
   margin-top: 20px;
+  font-size: 28px;
+  letter-spacing: 1px;
 }
 
+/* GAME LAYOUT */
 .game {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
-  margin-top: 40px;
+  margin-top: 50px;
 }
 
+/* PLAYER CARD */
 .player {
-  width: 120px;
+  width: 140px;
+  padding: 15px;
+  border-radius: 15px;
+  background: rgba(255,255,255,0.05);
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
+/* PLAYER COLORS */
 .p1 {
-  background: red;
+  background: linear-gradient(45deg, #ff2a2a, #ff0000);
   padding: 10px;
   border-radius: 10px;
 }
 
 .p2 {
-  background: green;
+  background: linear-gradient(45deg, #00aa00, #006600);
   padding: 10px;
   border-radius: 10px;
 }
 
+/* DICE */
 .dice {
-  font-size: 60px;
+  font-size: 80px;
   margin: 20px 0;
   transition: transform 0.3s;
 }
 
-/* Dice animation */
+/* SHAKE ANIMATION */
 .roll {
-  animation: shake 0.5s;
+  animation: shake 0.6s;
 }
 
 @keyframes shake {
-  0% { transform: rotate(0deg); }
-  25% { transform: rotate(20deg); }
-  50% { transform: rotate(-20deg); }
-  75% { transform: rotate(10deg); }
-  100% { transform: rotate(0deg); }
+  0% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(20deg) scale(1.2); }
+  50% { transform: rotate(-20deg) scale(1.2); }
+  75% { transform: rotate(10deg) scale(1.1); }
+  100% { transform: rotate(0deg) scale(1); }
 }
 
+/* VS TEXT */
 .vs {
-  font-size: 40px;
+  font-size: 50px;
   font-weight: bold;
   color: orange;
-  text-shadow: 0 0 20px orange;
+  text-shadow: 0 0 20px orange, 0 0 40px red;
 }
 
+/* BUTTON */
 button {
-  margin-top: 30px;
-  padding: 15px 30px;
-  background: red;
+  margin-top: 40px;
+  padding: 15px 40px;
+  background: linear-gradient(45deg, #ff0000, #cc0000);
   border: none;
   color: white;
   font-size: 18px;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
+  box-shadow: 0 5px 15px rgba(255,0,0,0.4);
   transition: 0.2s;
+}
+
+button:hover {
+  transform: scale(1.05);
 }
 
 button:active {
   transform: scale(0.9);
 }
 
+/* RESULT TEXT */
 .result {
   margin-top: 20px;
-  font-size: 20px;
+  font-size: 22px;
+  font-weight: bold;
 }
