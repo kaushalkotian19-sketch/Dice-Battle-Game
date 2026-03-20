@@ -32,7 +32,7 @@ dice2.classList.add("roll");
 setTimeout(() => {
   dice1.classList.remove("roll");
   dice2.classList.remove("roll");
-}, 500);
+}, 600);
   
   // winner logic
   if (roll1 > roll2) {
