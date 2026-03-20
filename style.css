@@ -201,10 +201,9 @@ button:active {
 }
 
 .winner {
-  box-shadow: 
-    0 0 30px gold,
-    0 0 60px rgba(255,215,0,0.8);
+  box-shadow: 0 0 40px gold, 0 0 80px gold;
   transform: scale(1.05);
+  transition: all 0.3s ease;
 }
 
 .shake {
