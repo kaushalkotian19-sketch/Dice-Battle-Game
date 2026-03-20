@@ -36,16 +36,18 @@ setTimeout(() => {
 }, 600);
   
   // winner logic
-  if (roll1 > roll2) {
-    total1++;
-    resultText.textContent = "🔥 Player 1 Wins!";
-  } else if (roll2 > roll1) {
-    total2++;
-    resultText.textContent = "🔥 Player 2 Wins!";
-  } else {
-    resultText.textContent = "🤝 Draw!";
-  }
+  const player1 = document.querySelector(".player1");
+const player2 = document.querySelector(".player2");
 
+// remove old highlight
+player1.classList.remove("winner");
+player2.classList.remove("winner");
+
+if (roll1 > roll2) {
+  player1.classList.add("winner");
+} else if (roll2 > roll1) {
+  player2.classList.add("winner");
+}
   // update totals
   total1El.textContent = total1;
   total2El.textContent = total2;
