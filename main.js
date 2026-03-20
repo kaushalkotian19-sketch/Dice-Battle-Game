@@ -35,9 +35,9 @@ setTimeout(() => {
   document.body.classList.remove("shake");
 }, 600);
   
-  // update dice images
-  dice1.src = `./assets/red-dice.png`;
-  dice2.src = `./assets/green-dice.png`;
+  // update dice images based on number
+dice1.src = `./assets/red-${roll1}.png`;
+dice2.src = `./assets/green-${roll2}.png`;
 
   // show numbers (temporary text)
   score1El.textContent = roll1;
