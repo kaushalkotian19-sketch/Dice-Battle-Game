@@ -27,13 +27,12 @@ h1 {
 
 /* PLAYER CARD (GLASS EFFECT) */
 .player {
-  width: 180px;
-  padding: 30px;
-  border-radius: 25px;
   background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(12px);
-  box-shadow:
-    0 0 50px rgba(0,0,0,0.9),
+  padding: 20px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 10px 40px rgba(0,0,0,0.6),
     inset 0 0 20px rgba(255,255,255,0.05);
 }
 
@@ -87,25 +86,27 @@ h1 {
 }
 
 /* VS GLOW (IMPORTANT) */
-.vs::before {
-  width: 120px;
-  height: 120px;
-  filter: blur(25px);
+.vs {
+  font-size: 40px;
+  font-weight: bold;
+  color: white;
+  position: relative;
+  z-index: 2;
 }
 
-/* FIRE EFFECT */
+/* fire glow behind VS */
 .vs::before {
   content: "";
   position: absolute;
-  width: 180px;
-  height: 180px;
-  background: radial-gradient(circle, orange, red, transparent);
-  filter: blur(35px);
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, orange, red, transparent 70%);
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: -1;
+  filter: blur(20px);
   animation: firePulse 1.5s infinite alternate;
+  z-index: -1;
 }
 
 @keyframes firePulse {
@@ -114,10 +115,12 @@ h1 {
 }
 
 .dice img {
-  width: 100px;
-  height: 100px;
-  border-radius: 20px;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.7);
+  width: 80px;
+  height: 80px;
+  border-radius: 15px;
+  box-shadow:
+    0 0 20px rgba(255,255,255,0.2),
+    inset 0 0 10px rgba(0,0,0,0.5);
 }
 
 /* animation */
@@ -170,7 +173,19 @@ button:active {
 }
 /* RESULT TEXT */
 .result {
-  margin-top: 25px;
-  font-size: 24px;
+  margin-top: 20px;
+  font-size: 22px;
   font-weight: bold;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
 }
