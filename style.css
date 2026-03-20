@@ -47,10 +47,25 @@ h1 {
 
 /* DICE */
 .dice {
-  font-size: 100px;
-  margin: 25px 0;
-  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8));
-  transition: transform 0.3s;
+  font-size: 70px;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  margin: 20px auto;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+}
+
+/* RED DICE */
+.player1 .dice {
+  background: linear-gradient(145deg, #ff2a2a, #b30000);
+}
+
+/* GREEN DICE */
+.player2 .dice {
+  background: linear-gradient(145deg, #2ecc71, #0a7d3c);
 }
 
 /* DICE ANIMATION */
