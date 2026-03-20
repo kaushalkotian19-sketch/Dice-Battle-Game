@@ -220,3 +220,19 @@ button:active {
   75% { transform: translate(-5px, -5px); }
   100% { transform: translate(0); }
 }
+
+.bet-box {
+  margin-top: 20px;
+  text-align: center;
+}
+
+#bet {
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  width: 200px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+}
