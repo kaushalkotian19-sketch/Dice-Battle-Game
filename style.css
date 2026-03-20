@@ -1,31 +1,35 @@
 body {
-  background: radial-gradient(circle at top, #0a0f1f, #050814);
+  background: radial-gradient(circle at top, #0a0f1f, #02040a);
   color: white;
   text-align: center;
   font-family: 'Segoe UI', sans-serif;
 }
 
+/* TITLE */
 h1 {
   margin-top: 20px;
-  font-size: 28px;
-  letter-spacing: 1px;
+  font-size: 30px;
 }
 
 /* GAME LAYOUT */
 .game {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
+  gap: 40px;
   margin-top: 50px;
 }
 
-/* PLAYER CARD */
+/* PLAYER CARD (GLASS EFFECT) */
 .player {
-  width: 140px;
-  padding: 15px;
-  border-radius: 15px;
+  width: 150px;
+  padding: 20px;
+  border-radius: 20px;
   background: rgba(255,255,255,0.05);
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 0 30px rgba(0,0,0,0.7),
+    inset 0 0 10px rgba(255,255,255,0.05);
 }
 
 /* PLAYER COLORS */
@@ -36,19 +40,20 @@ h1 {
 }
 
 .p2 {
-  background: linear-gradient(45deg, #00aa00, #006600);
+  background: linear-gradient(45deg, #00aa00, #008000);
   padding: 10px;
   border-radius: 10px;
 }
 
 /* DICE */
 .dice {
-  font-size: 80px;
-  margin: 20px 0;
+  font-size: 100px;
+  margin: 25px 0;
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8));
   transition: transform 0.3s;
 }
 
-/* SHAKE ANIMATION */
+/* DICE ANIMATION */
 .roll {
   animation: shake 0.6s;
 }
@@ -61,30 +66,35 @@ h1 {
   100% { transform: rotate(0deg) scale(1); }
 }
 
-/* VS TEXT */
+/* VS GLOW (IMPORTANT) */
 .vs {
-  font-size: 50px;
+  font-size: 60px;
   font-weight: bold;
   color: orange;
-  text-shadow: 0 0 20px orange, 0 0 40px red;
+  text-shadow:
+    0 0 20px orange,
+    0 0 40px red,
+    0 0 80px orange;
 }
 
 /* BUTTON */
 button {
-  margin-top: 40px;
-  padding: 15px 40px;
+  margin-top: 50px;
+  padding: 18px 50px;
   background: linear-gradient(45deg, #ff0000, #cc0000);
   border: none;
   color: white;
-  font-size: 18px;
-  border-radius: 12px;
+  font-size: 20px;
+  border-radius: 15px;
   cursor: pointer;
-  box-shadow: 0 5px 15px rgba(255,0,0,0.4);
+  box-shadow: 
+    0 0 20px rgba(255,0,0,0.6),
+    0 5px 20px rgba(0,0,0,0.5);
   transition: 0.2s;
 }
 
 button:hover {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
 button:active {
@@ -93,7 +103,7 @@ button:active {
 
 /* RESULT TEXT */
 .result {
-  margin-top: 20px;
-  font-size: 22px;
+  margin-top: 25px;
+  font-size: 24px;
   font-weight: bold;
 }
