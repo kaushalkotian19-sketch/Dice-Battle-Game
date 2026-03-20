@@ -1,3 +1,4 @@
+const diceSound = new Audio("./assets/dice.mp3");
 const diceBtn = document.querySelector("button");
 const dice1 = document.getElementById("dice1");
 const dice2 = document.getElementById("dice2");
