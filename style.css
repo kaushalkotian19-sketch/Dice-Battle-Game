@@ -74,8 +74,8 @@ h1 {
 }
 
 /* DICE ANIMATION */
-.roll {
-  animation: shake 0.6s;
+.roll img {
+  animation: shake 0.5s;
 }
 
 @keyframes shake {
