@@ -15,6 +15,8 @@ let total1 = 0;
 let total2 = 0;
 
 diceBtn.addEventListener("click", () => {
+  diceSound.currentTime = 0;
+diceSound.play();
   // random dice (1–6)
   let roll1 = Math.floor(Math.random() * 6) + 1;
   let roll2 = Math.floor(Math.random() * 6) + 1;
