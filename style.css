@@ -127,7 +127,10 @@ h1 {
 
 /* BUTTON */
 button {
-  margin-top: 40px;
+  width: auto;
+  display: inline-block;
+
+  margin: 30px auto;
   padding: 18px 50px;
   background: linear-gradient(45deg, #ff0000, #cc0000);
   border: none;
@@ -135,10 +138,22 @@ button {
   font-size: 20px;
   border-radius: 15px;
   cursor: pointer;
+
   box-shadow: 
     0 0 30px rgba(255,0,0,0.8),
     0 10px 30px rgba(0,0,0,0.6);
+
   transition: all 0.2s ease;
+}
+
+/* hover */
+button:hover {
+  transform: scale(1.08);
+}
+
+/* click */
+button:active {
+  transform: scale(0.92);
 }
 
 /* HOVER (glow + lift) */
