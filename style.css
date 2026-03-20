@@ -199,3 +199,10 @@ button:active {
   50%  { transform: rotate(180deg) scale(1.2); }
   100% { transform: rotate(360deg) scale(1); }
 }
+
+.winner {
+  box-shadow: 
+    0 0 30px gold,
+    0 0 60px rgba(255,215,0,0.8);
+  transform: scale(1.05);
+}
