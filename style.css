@@ -122,16 +122,6 @@ button:active {
 }
 
 /* BET BOX */
-.bet-box {
-  margin-top: 10px;
-}
-
-#bet {
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-  text-align: center;
-}
 
 /* TOTALS */
 .totals {
