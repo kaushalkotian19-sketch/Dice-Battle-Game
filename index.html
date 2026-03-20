@@ -13,37 +13,55 @@
 
 <div class="game">
 
-  <!-- PLAYER 1 -->
-  <div class="player player1">
-  <div class="p1">PLAYER 1</div>
-  <div class="dice">
-    <img id="dice1" src="./assets/red-dice.png">
+  <!-- PLAYERS ROW -->
+  <div class="players-row">
+
+    <!-- PLAYER 1 -->
+    <div class="player player1">
+      <div class="p1">PLAYER 1</div>
+      <div class="dice">
+        <img id="dice1" src="./assets/red-1.png">
+      </div>
+      <p>Dice: <span id="score1">0</span></p>
+    </div>
+
+    <div class="vs">VS</div>
+
+    <!-- PLAYER 2 -->
+    <div class="player player2">
+      <div class="p2">PLAYER 2</div>
+      <div class="dice">
+        <img id="dice2" src="./assets/green-1.png">
+      </div>
+      <p>Dice: <span id="score2">0</span></p>
+    </div>
+
   </div>
-  <p>Dice: <span id="score1">0</span></p>
-</div>
 
-<div class="vs">VS</div>
-
-<div class="player player2">
-  <div class="p2">PLAYER 2</div>
-  <div class="dice">
-    <img id="dice2" src="./assets/green-dice.png">
+  <!-- BET INPUT -->
+  <div class="bet-box">
+    <input type="number" id="bet" placeholder="💰 Enter coins" />
   </div>
-  <p>Dice: <span id="score2">0</span></p>
+
+  <!-- BUTTON -->
+  <button id="roll">🎲 Roll Dice</button>
+
+  <hr style="margin:40px 20px; opacity:0.2;">
+
+  <!-- TOTALS -->
+  <div class="totals">
+    <div>Player 1: <span id="p1-total">0</span></div>
+    <div>Player 2: <span id="p2-total">0</span></div>
+  </div>
+
+  <!-- COINS -->
+  <p id="coins">💰 Coins: 100</p>
+
+  <!-- RESULT -->
+  <p class="result">Roll to start</p>
+
 </div>
 
-<div class="bet-box">
-  <input type="number" id="bet" placeholder="💰 Enter coins" />
-</div>
-<button id="roll">🎲 Roll Dice</button>
-<hr style="margin:40px 20px; opacity:0.2;">
-
-<div style="display:flex; justify-content:space-around; font-size:22px;">
-  <div>Player 1: <span id="p1-total">0</span></div>
-  <div>Player 2: <span id="p2-total">0</span></div>
-</div>
-  
-<p class="result">Roll to start</p>
 <script src="main.js"></script>
 
 </body>
