@@ -82,3 +82,5 @@ if (roll1 > roll2) {
   total1El.textContent = total1;
   total2El.textContent = total2;
 });
+
+console.log("Coins:", coins);
