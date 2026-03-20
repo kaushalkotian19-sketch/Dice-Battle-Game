@@ -1,1 +1,80 @@
+body {
+  background: #0a0f1f;
+  color: white;
+  text-align: center;
+  font-family: sans-serif;
+}
 
+h1 {
+  margin-top: 20px;
+}
+
+.game {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 40px;
+}
+
+.player {
+  width: 120px;
+}
+
+.p1 {
+  background: red;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.p2 {
+  background: green;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.dice {
+  font-size: 60px;
+  margin: 20px 0;
+  transition: transform 0.3s;
+}
+
+/* Dice animation */
+.roll {
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(20deg); }
+  50% { transform: rotate(-20deg); }
+  75% { transform: rotate(10deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.vs {
+  font-size: 40px;
+  font-weight: bold;
+  color: orange;
+  text-shadow: 0 0 20px orange;
+}
+
+button {
+  margin-top: 30px;
+  padding: 15px 30px;
+  background: red;
+  border: none;
+  color: white;
+  font-size: 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:active {
+  transform: scale(0.9);
+}
+
+.result {
+  margin-top: 20px;
+  font-size: 20px;
+}
