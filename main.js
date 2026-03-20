@@ -21,6 +21,20 @@ diceSound.play();
   let roll1 = Math.floor(Math.random() * 6) + 1;
   let roll2 = Math.floor(Math.random() * 6) + 1;
 
+  // dice animation
+dice1.classList.add("roll");
+dice2.classList.add("roll");
+
+// ⚡ SHAKE AFTER animation starts
+document.body.classList.add("shake");
+
+setTimeout(() => {
+  dice1.classList.remove("roll");
+  dice2.classList.remove("roll");
+
+  document.body.classList.remove("shake");
+}, 600);
+  
   // update dice images
   dice1.src = `./assets/red-dice.png`;
   dice2.src = `./assets/green-dice.png`;
