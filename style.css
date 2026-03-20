@@ -149,6 +149,10 @@ button {
   transition: all 0.2s ease;
 }
 
+button:active {
+  transform: scale(0.95);
+}
+
 /* hover */
 button:hover {
   transform: scale(1.08);
