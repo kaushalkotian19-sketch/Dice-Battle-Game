@@ -26,6 +26,14 @@ diceBtn.addEventListener("click", () => {
   score1El.textContent = roll1;
   score2El.textContent = roll2;
 
+dice1.classList.add("roll");
+dice2.classList.add("roll");
+
+setTimeout(() => {
+  dice1.classList.remove("roll");
+  dice2.classList.remove("roll");
+}, 500);
+  
   // winner logic
   if (roll1 > roll2) {
     total1++;
