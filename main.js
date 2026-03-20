@@ -13,8 +13,20 @@ const resultText = document.querySelector(".result");
 
 let total1 = 0;
 let total2 = 0;
+let coins = 100;
 
 diceBtn.addEventListener("click", () => {
+  const bet = parseInt(document.getElementById("bet").value);
+
+if (!bet || bet <= 0) {
+  alert("Enter valid coins");
+  return;
+}
+
+if (bet > coins) {
+  alert("Not enough coins");
+  return;
+}
   diceSound.currentTime = 0;
 diceSound.play();
   // random dice (1–6)
@@ -61,8 +73,10 @@ player2.classList.remove("winner");
 
 if (roll1 > roll2) {
   player1.classList.add("winner");
+  coins += bet;
 } else if (roll2 > roll1) {
   player2.classList.add("winner");
+  coins -= bet;
 }
   // update totals
   total1El.textContent = total1;
