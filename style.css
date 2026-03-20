@@ -1,8 +1,13 @@
 body {
-  background: radial-gradient(circle at top, #0a0f1f, #02040a);
+  background: radial-gradient(circle at center, #0a0f1f, #02040a);
   color: white;
   text-align: center;
   font-family: 'Segoe UI', sans-serif;
+
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* TITLE */
@@ -82,12 +87,10 @@ h1 {
 }
 
 /* VS GLOW (IMPORTANT) */
-.vs {
-  font-size: 60px;
-  font-weight: bold;
-  color: white;
-  position: relative;
-  z-index: 2;
+.vs::before {
+  width: 120px;
+  height: 120px;
+  filter: blur(25px);
 }
 
 /* FIRE EFFECT */
@@ -111,9 +114,10 @@ h1 {
 }
 
 .dice img {
-  width: 80px;
-  height: 80px;
-  transition: transform 0.3s;
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.7);
 }
 
 /* animation */
