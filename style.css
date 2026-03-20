@@ -70,11 +70,22 @@ h1 {
 .vs {
   font-size: 60px;
   font-weight: bold;
-  color: orange;
-  text-shadow:
-    0 0 20px orange,
-    0 0 40px red,
-    0 0 80px orange;
+  color: white;
+  position: relative;
+  z-index: 2;
+}
+
+.vs::before {
+  content: "";
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, orange, red, transparent);
+  filter: blur(20px);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
 }
 
 /* BUTTON */
