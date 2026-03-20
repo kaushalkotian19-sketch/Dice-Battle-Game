@@ -1,1 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dice Battle Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 
+<body>
+
+<h1>🎲 Dice Battle Game</h1>
+
+<div class="game">
+
+  <!-- PLAYER 1 -->
+  <div class="player">
+    <h2 class="p1">PLAYER 1</h2>
+    <div id="dice1" class="dice">🎲</div>
+    <p>Score: <span id="score1">0</span></p>
+  </div>
+
+  <!-- VS -->
+  <div class="vs">VS</div>
+
+  <!-- PLAYER 2 -->
+  <div class="player">
+    <h2 class="p2">PLAYER 2</h2>
+    <div id="dice2" class="dice">🎲</div>
+    <p>Score: <span id="score2">0</span></p>
+  </div>
+
+</div>
+
+<button id="roll">🎲 Roll Dice</button>
+
+<div class="result" id="result">Roll to start</div>
+
+<script src="main.js"></script>
+
+</body>
+</html>
