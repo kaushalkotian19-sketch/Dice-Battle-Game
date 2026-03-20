@@ -22,14 +22,14 @@ h1 {
 
 /* PLAYER CARD (GLASS EFFECT) */
 .player {
-  width: 150px;
-  padding: 20px;
-  border-radius: 20px;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
-  box-shadow: 
-    0 0 30px rgba(0,0,0,0.7),
-    inset 0 0 10px rgba(255,255,255,0.05);
+  width: 160px;
+  padding: 25px;
+  border-radius: 25px;
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(12px);
+  box-shadow:
+    0 0 40px rgba(0,0,0,0.8),
+    inset 0 0 15px rgba(255,255,255,0.05);
 }
 
 /* PLAYER COLORS */
