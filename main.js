@@ -1,3 +1,4 @@
+const coinsEl = document.getElementById("coins");
 const diceSound = new Audio("./assets/dice.mp3");
 
 const diceBtn = document.getElementById("roll");
@@ -11,7 +12,7 @@ const total1El = document.getElementById("p1-total");
 const total2El = document.getElementById("p2-total");
 
 const resultText = document.querySelector(".result");
-const coinsEl = document.getElementById("coins");
+
 
 let total1 = 0;
 let total2 = 0;
@@ -86,5 +87,4 @@ resultText.classList.add("result");
   total1El.textContent = total1;
   total2El.textContent = total2;
 
-  coinsEl.textContent = "💰 Coins: " + coins;
-});
+  coinsEl.textContent = coins;
