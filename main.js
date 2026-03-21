@@ -1,8 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
 
-  // 🔹 ALL YOUR CURRENT CODE GOES HERE
-
-});
 
 let level = 1;
 const coinsEl = document.getElementById("coins");
