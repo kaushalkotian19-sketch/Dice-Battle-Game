@@ -199,3 +199,98 @@ button:active {
     ) scale(1.5);
   }
 }
+
+/* HOME SCREEN */
+.home {
+  text-align: center;
+  padding: 20px;
+  color: white;
+}
+
+/* TITLE */
+.title {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.title span {
+  color: gold;
+}
+
+/* TAGLINE */
+.tagline {
+  margin-bottom: 20px;
+  opacity: 0.8;
+}
+
+/* FEATURES */
+.features {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.card {
+  background: rgba(255,255,255,0.05);
+  padding: 10px;
+  border-radius: 12px;
+  width: 100px;
+  font-size: 14px;
+}
+
+/* HOW SECTION */
+.how {
+  margin-top: 20px;
+}
+
+.steps {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 14px;
+}
+
+/* LOGIN BOX */
+.login-box {
+  margin-top: 25px;
+  padding: 15px;
+  border-radius: 15px;
+  background: rgba(255,255,255,0.05);
+}
+
+.login-box input {
+  width: 80%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* BUTTON */
+.login-box button {
+  background: linear-gradient(45deg, #00ff88, #00cc66);
+  border: none;
+  padding: 12px 20px;
+  border-radius: 25px;
+  color: black;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* COINS */
+.coins {
+  margin-top: 10px;
+  color: gold;
+}
+
+/* DISCLAIMER */
+.disclaimer {
+  margin-top: 25px;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(255,0,0,0.1);
+  font-size: 14px;
+}
