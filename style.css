@@ -120,12 +120,18 @@ button:active {
   transform: scale(0.95);
 }
 
+
 /* RESULT */
 .result {
   font-size: 22px;
   font-weight: bold;
+  animation: pop 0.3s ease;
 }
 
+@keyframes pop {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
 /* WINNER */
 .winner {
   box-shadow: 0 0 20px gold, 0 0 40px gold;
