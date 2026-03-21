@@ -63,18 +63,25 @@ diceBtn.addEventListener("click", () => {
   player2.classList.remove("winner");
 
   if (roll1 > roll2) {
-    player1.classList.add("winner");
-    resultText.textContent = "🔥 Player 1 Wins!";
-    total1++;
-    coins += bet;
-  } else if (roll2 > roll1) {
-    player2.classList.add("winner");
-    resultText.textContent = "🔥 Player 2 Wins!";
-    total2++;
-    coins -= bet;
-  } else {
-    resultText.textContent = "🤝 Draw!";
-  }
+  player1.classList.add("winner");
+  resultText.textContent = "🔥 Player 1 Wins!";
+  total1++;
+  coins += bet;
+
+} else if (roll2 > roll1) {
+  player2.classList.add("winner");
+  resultText.textContent = "🔥 Player 2 Wins!";
+  total2++;
+  coins -= bet;
+
+} else {
+  resultText.textContent = "🤝 Draw!";
+}
+
+// ✅ ALWAYS RUN (for all cases)
+resultText.classList.remove("result");
+void resultText.offsetWidth;
+resultText.classList.add("result");
 
   total1El.textContent = total1;
   total2El.textContent = total2;
