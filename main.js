@@ -79,6 +79,11 @@ diceBtn.addEventListener("click", () => {
   resultText.textContent = "🤝 Draw!";
 }
 
+  if (!bet) {
+  alert("Enter coins first!");
+  return;
+  }
+  
 // ✅ ALWAYS RUN (for all cases)
 resultText.classList.remove("result");
 void resultText.offsetWidth;
