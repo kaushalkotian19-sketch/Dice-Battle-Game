@@ -17,9 +17,8 @@ const coinContainer = document.getElementById("coin-animation");
 
 let total1 = 0;
 let total2 = 0;
-let coins = localStorage.getItem("coins") 
-  ? parseInt(localStorage.getItem("coins")) 
-  : 100;
+let savedCoins = parseInt(localStorage.getItem("coins"));
+let coins = isNaN(savedCoins) ? 100 : savedCoins;
 
 // 💰 Coin animation
 function showCoins() {
