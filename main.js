@@ -37,7 +37,7 @@ function showCoins() {
 
 diceBtn.addEventListener("click", () => {
 
-  const bet = parseInt(document.getElementById("bet").value);
+  const bet = Number(document.getElementById("bet").value.trim());
 
   // ✅ VALIDATION (ONLY ONCE)
   if (!bet || bet <= 0) {
