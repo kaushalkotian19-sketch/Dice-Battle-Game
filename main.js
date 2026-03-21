@@ -17,8 +17,12 @@ const coinContainer = document.getElementById("coin-animation");
 
 let total1 = 0;
 let total2 = 0;
-let savedCoins = parseInt(localStorage.getItem("coins"));
-let coins = isNaN(savedCoins) ? 100 : savedCoins;
+let coins = Number(localStorage.getItem("coins"));
+
+if (!coins || isNaN(coins)) {
+  coins = 100;
+  localStorage.setItem("coins", coins);
+}
 
 // 💰 Coin animation
 function showCoins() {
@@ -41,7 +45,7 @@ diceBtn.addEventListener("click", () => {
 console.log("BET:", bet, "COINS:", coins);
   
   // ✅ VALIDATION (ONLY ONCE)
-  if (!bet || bet <= 0) {
+  if (bet > coins) {
   alert("Enter valid coins");
   return;
 }
