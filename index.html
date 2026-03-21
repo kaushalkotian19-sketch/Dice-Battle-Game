@@ -8,10 +8,34 @@
 </head>
 
 <body>
+<div id="home-screen">
 
-<h1>🎲 Dice Battle Game</h1>
+  <h1>🎲 Dice Battle Game</h1>
+  <p>Roll • Bet • Win</p>
 
-<div class="game">
+  <h3>How it works</h3>
+  <ul>
+    <li>Enter bet</li>
+    <li>Roll dice</li>
+    <li>Highest wins coins</li>
+  </ul>
+
+  <input type="text" id="username" placeholder="Enter username">
+  <button id="start-btn">Start Playing</button>
+
+  <p>💰 Starting Coins: 100</p>
+
+  <h4>Disclaimer</h4>
+  <p>This game is for entertainment only. No real money.</p>
+
+</div>
+  
+<div id="game-screen" style="display:none;">
+  <h1>🎲 Dice Battle Game</h1>
+
+  <div class="game">
+
+
 
   <div class="players-row">
 
@@ -53,7 +77,8 @@
   <p class="result">Roll to start</p>
 
 </div>
-
+</div> <!-- game -->
+</div> <!-- game-screen -->
 <div id="coin-animation"></div>
 
 <script src="main.js"></script>
