@@ -18,7 +18,7 @@ let total1 = 0;
 let total2 = 0;
 let coins = 100;
 
-// 💰 coin animation
+// 💰 Coin animation
 function showCoins() {
   for (let i = 0; i < 8; i++) {
     const coin = document.createElement("div");
@@ -37,6 +37,7 @@ diceBtn.addEventListener("click", () => {
 
   const bet = parseInt(document.getElementById("bet").value);
 
+  // ✅ VALIDATION (ONLY ONCE)
   if (!bet || bet <= 0) {
     alert("Enter valid coins");
     return;
@@ -47,13 +48,15 @@ diceBtn.addEventListener("click", () => {
     return;
   }
 
+  // 🔊 sound
   diceSound.currentTime = 0;
   diceSound.play();
 
-  let roll1 = Math.floor(Math.random() * 6) + 1;
-  let roll2 = Math.floor(Math.random() * 6) + 1;
+  // 🎲 roll
+  const roll1 = Math.floor(Math.random() * 6) + 1;
+  const roll2 = Math.floor(Math.random() * 6) + 1;
 
-  // animation
+  // 🎬 animation
   dice1.classList.add("roll");
   dice2.classList.add("roll");
   document.body.classList.add("shake");
@@ -64,7 +67,7 @@ diceBtn.addEventListener("click", () => {
     document.body.classList.remove("shake");
   }, 500);
 
-  // update dice
+  // 🎲 update images
   dice1.src = `./assets/red-${roll1}.png`;
   dice2.src = `./assets/green-${roll2}.png`;
 
@@ -77,13 +80,14 @@ diceBtn.addEventListener("click", () => {
   player1.classList.remove("winner");
   player2.classList.remove("winner");
 
+  // 🏆 result logic
   if (roll1 > roll2) {
     player1.classList.add("winner");
     resultText.textContent = "🔥 Player 1 Wins!";
     total1++;
     coins += bet;
 
-    showCoins(); // 💰 animation
+    showCoins();
 
   } else if (roll2 > roll1) {
     player2.classList.add("winner");
@@ -95,11 +99,12 @@ diceBtn.addEventListener("click", () => {
     resultText.textContent = "🤝 Draw!";
   }
 
-  // animation reset
+  // 🔁 result animation refresh
   resultText.classList.remove("result");
   void resultText.offsetWidth;
   resultText.classList.add("result");
 
+  // 📊 update UI
   total1El.textContent = total1;
   total2El.textContent = total2;
   coinsEl.textContent = coins;
