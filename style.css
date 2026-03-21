@@ -169,3 +169,33 @@ button:active {
   color: gold;
   margin-top: 10px;
 }
+
+/* COIN ANIMATION */
+#coin-animation {
+  position: fixed;
+  top: 60%;
+  left: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+}
+
+.coin {
+  position: absolute;
+  font-size: 24px;
+  animation: flyCoin 1s ease-out forwards;
+}
+
+@keyframes flyCoin {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(
+      calc(-50px + 100px * var(--x)),
+      calc(-100px - 100px * var(--y))
+    ) scale(1.5);
+  }
+}
