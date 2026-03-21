@@ -175,9 +175,9 @@ button:active {
   position: fixed;
   top: 60%;
   left: 50%;
-  pointer-events: none;
   transform: translate(-50%, -50%);
-  z-index: 999;
+  pointer-events: none;
+  z-index: 0;  /* 🔥 FIXED (was 999) */
 }
 
 .coin {
