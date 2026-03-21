@@ -86,6 +86,8 @@ diceBtn.addEventListener("click", () => {
   total1++;
   coins += bet;
 
+    showCoins();
+
 } else if (roll2 > roll1) {
   player2.classList.add("winner");
   resultText.textContent = "🔥 Player 2 Wins!";
