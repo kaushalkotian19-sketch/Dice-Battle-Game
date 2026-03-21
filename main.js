@@ -42,14 +42,14 @@ console.log("BET:", bet, "COINS:", coins);
   
   // ✅ VALIDATION (ONLY ONCE)
   if (!bet || bet <= 0) {
-    alert("Enter valid coins");
-    return;
-  }
+  alert("Enter valid coins");
+  return;
+}
 
-  if (bet > coins) {
-    alert("Not enough coins");
-    return;
-  }
+if (bet > Number(coins)) {
+  alert("Not enough coins");
+  return;
+}
 
   // 🔊 sound
   diceSound.currentTime = 0;
