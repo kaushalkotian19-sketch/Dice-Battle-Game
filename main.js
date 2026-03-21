@@ -53,8 +53,12 @@ diceBtn.addEventListener("click", () => {
 
   // 🔊 sound
   diceSound.currentTime = 0;
-  diceSound.play();
+diceSound.play();
 
+// 📳 vibration on roll (ADD HERE)
+if (navigator.vibrate) {
+  navigator.vibrate(200);
+    }
   // 🎲 roll
   const roll1 = Math.floor(Math.random() * 6) + 1;
   const roll2 = Math.floor(Math.random() * 6) + 1;
@@ -86,6 +90,9 @@ diceBtn.addEventListener("click", () => {
   // 🏆 result logic
   if (roll1 > roll2) {
     player1.classList.add("winner");
+    if (navigator.vibrate) {
+  navigator.vibrate([100, 50, 200]);
+    }
     resultText.textContent = "🔥 Player 1 Wins!";
     total1++;
     coins += bet;
@@ -94,6 +101,9 @@ diceBtn.addEventListener("click", () => {
 
   } else if (roll2 > roll1) {
     player2.classList.add("winner");
+    if (navigator.vibrate) {
+  navigator.vibrate([100, 50, 200]);
+    }
     resultText.textContent = "🔥 Player 2 Wins!";
     total2++;
     coins -= bet;
