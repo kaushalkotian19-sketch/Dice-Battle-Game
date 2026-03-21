@@ -45,12 +45,12 @@ diceBtn.addEventListener("click", () => {
 console.log("BET:", bet, "COINS:", coins);
   
   // ✅ VALIDATION (ONLY ONCE)
-  if (bet > coins) {
+  if (!bet || bet <= 0) {
   alert("Enter valid coins");
   return;
 }
 
-if (bet > Number(coins)) {
+if (bet > coins) {
   alert("Not enough coins");
   return;
 }
