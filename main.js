@@ -1,4 +1,3 @@
-localStorage.clear();
 let level = 1;
 const coinsEl = document.getElementById("coins");
 const diceSound = new Audio("./assets/dice.mp3");
