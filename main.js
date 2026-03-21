@@ -161,3 +161,10 @@ localStorage.setItem("coins", coins);
 level = Math.floor(coins / 100) + 1;
 document.title = "Level " + level + " | Dice Game";
 });
+
+function logout() {
+  localStorage.removeItem("username");
+
+  document.getElementById("home-screen").style.display = "block";
+  document.getElementById("game-screen").style.display = "none";
+}
