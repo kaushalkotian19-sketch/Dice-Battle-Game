@@ -12,28 +12,26 @@ const total1El = document.getElementById("p1-total");
 const total2El = document.getElementById("p2-total");
 
 const resultText = document.querySelector(".result");
-
 const coinContainer = document.getElementById("coin-animation");
 
+let total1 = 0;
+let total2 = 0;
+let coins = 100;
+
+// 💰 coin animation
 function showCoins() {
   for (let i = 0; i < 8; i++) {
     const coin = document.createElement("div");
     coin.classList.add("coin");
     coin.textContent = "💰";
 
-    // random direction
     coin.style.setProperty("--x", Math.random());
     coin.style.setProperty("--y", Math.random());
 
     coinContainer.appendChild(coin);
-
     setTimeout(() => coin.remove(), 1000);
   }
 }
-
-let total1 = 0;
-let total2 = 0;
-let coins = 100;
 
 diceBtn.addEventListener("click", () => {
 
@@ -66,11 +64,10 @@ diceBtn.addEventListener("click", () => {
     document.body.classList.remove("shake");
   }, 500);
 
-  // images
+  // update dice
   dice1.src = `./assets/red-${roll1}.png`;
   dice2.src = `./assets/green-${roll2}.png`;
 
-  // numbers
   score1El.textContent = roll1;
   score2El.textContent = roll2;
 
@@ -81,34 +78,30 @@ diceBtn.addEventListener("click", () => {
   player2.classList.remove("winner");
 
   if (roll1 > roll2) {
-  player1.classList.add("winner");
-  resultText.textContent = "🔥 Player 1 Wins!";
-  total1++;
-  coins += bet;
+    player1.classList.add("winner");
+    resultText.textContent = "🔥 Player 1 Wins!";
+    total1++;
+    coins += bet;
 
-    showCoins();
+    showCoins(); // 💰 animation
 
-} else if (roll2 > roll1) {
-  player2.classList.add("winner");
-  resultText.textContent = "🔥 Player 2 Wins!";
-  total2++;
-  coins -= bet;
+  } else if (roll2 > roll1) {
+    player2.classList.add("winner");
+    resultText.textContent = "🔥 Player 2 Wins!";
+    total2++;
+    coins -= bet;
 
-} else {
-  resultText.textContent = "🤝 Draw!";
-}
-
-  if (!bet) {
-  alert("Enter coins first!");
-  return;
+  } else {
+    resultText.textContent = "🤝 Draw!";
   }
-  
-// ✅ ALWAYS RUN (for all cases)
-resultText.classList.remove("result");
-void resultText.offsetWidth;
-resultText.classList.add("result");
+
+  // animation reset
+  resultText.classList.remove("result");
+  void resultText.offsetWidth;
+  resultText.classList.add("result");
 
   total1El.textContent = total1;
   total2El.textContent = total2;
-
   coinsEl.textContent = coins;
+
+});
