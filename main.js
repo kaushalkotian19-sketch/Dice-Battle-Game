@@ -53,9 +53,9 @@ diceBtn.addEventListener("click", () => {
 
   // 🔊 sound
   diceSound.currentTime = 0;
-diceSound.play();
+diceSound.play().catch(() => {}); // prevent crash
 
-// 📳 vibration on roll (ADD HERE)
+// vibration (SAFE)
 if (navigator.vibrate) {
   navigator.vibrate(200);
 }
@@ -114,8 +114,9 @@ if (navigator.vibrate) {
 
   // 🔁 result animation refresh
   resultText.classList.remove("result");
-  void resultText.offsetWidth;
+setTimeout(() => {
   resultText.classList.add("result");
+}, 10);
 
   // 📊 update UI
   total1El.textContent = total1;
