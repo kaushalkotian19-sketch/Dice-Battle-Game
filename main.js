@@ -38,7 +38,8 @@ function showCoins() {
 diceBtn.addEventListener("click", () => {
 
   const bet = Number(document.getElementById("bet").value.trim());
-
+console.log("BET:", bet, "COINS:", coins);
+  
   // ✅ VALIDATION (ONLY ONCE)
   if (!bet || bet <= 0) {
     alert("Enter valid coins");
