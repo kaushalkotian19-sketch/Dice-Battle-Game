@@ -163,3 +163,9 @@ button:active {
   gap: 40px;
   font-size: 20px;
   }
+
+.coins {
+  font-size: 20px;
+  color: gold;
+  margin-top: 10px;
+}
