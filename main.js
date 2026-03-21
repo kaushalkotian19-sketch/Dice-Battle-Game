@@ -58,7 +58,7 @@ diceSound.play();
 // 📳 vibration on roll (ADD HERE)
 if (navigator.vibrate) {
   navigator.vibrate(200);
-    }
+}
   // 🎲 roll
   const roll1 = Math.floor(Math.random() * 6) + 1;
   const roll2 = Math.floor(Math.random() * 6) + 1;
