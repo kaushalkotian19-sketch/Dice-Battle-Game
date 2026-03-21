@@ -13,6 +13,23 @@ const total2El = document.getElementById("p2-total");
 
 const resultText = document.querySelector(".result");
 
+const coinContainer = document.getElementById("coin-animation");
+
+function showCoins() {
+  for (let i = 0; i < 8; i++) {
+    const coin = document.createElement("div");
+    coin.classList.add("coin");
+    coin.textContent = "💰";
+
+    // random direction
+    coin.style.setProperty("--x", Math.random());
+    coin.style.setProperty("--y", Math.random());
+
+    coinContainer.appendChild(coin);
+
+    setTimeout(() => coin.remove(), 1000);
+  }
+}
 
 let total1 = 0;
 let total2 = 0;
