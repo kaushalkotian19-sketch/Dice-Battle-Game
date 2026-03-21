@@ -16,7 +16,9 @@ const coinContainer = document.getElementById("coin-animation");
 
 let total1 = 0;
 let total2 = 0;
-let coins = 100;
+let coins = localStorage.getItem("coins") 
+  ? parseInt(localStorage.getItem("coins")) 
+  : 100;
 
 // 💰 Coin animation
 function showCoins() {
@@ -107,6 +109,9 @@ diceBtn.addEventListener("click", () => {
   // 📊 update UI
   total1El.textContent = total1;
   total2El.textContent = total2;
-  coinsEl.textContent = coins;
+  coinsEl.textContent = "💰 Coins: " + coins;
+
+  // 💾 SAVE coins (ADD THIS LINE HERE)
+localStorage.setItem("coins", coins);
 
 });
