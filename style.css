@@ -128,8 +128,13 @@ button:active {
 
 /* WINNER */
 .winner {
-  box-shadow: 0 0 40px gold;
-  transform: scale(1.05);
+  box-shadow: 0 0 20px gold, 0 0 40px gold;
+  animation: glow 1s infinite alternate;
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 10px gold; }
+  to { box-shadow: 0 0 40px gold; }
 }
 
 .bet-box {
