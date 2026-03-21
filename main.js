@@ -1,3 +1,9 @@
+document.addEventListener("DOMContentLoaded", () => {
+
+  // 🔹 ALL YOUR CURRENT CODE GOES HERE
+
+});
+
 let level = 1;
 const coinsEl = document.getElementById("coins");
 const diceSound = new Audio("./assets/dice.mp3");
@@ -5,6 +11,31 @@ const diceSound = new Audio("./assets/dice.mp3");
 const diceBtn = document.getElementById("roll");
 const dice1 = document.getElementById("dice1");
 const dice2 = document.getElementById("dice2");
+
+const homeScreen = document.getElementById("home-screen");
+const gameScreen = document.getElementById("game-screen");
+const startBtn = document.getElementById("start-btn");
+
+let savedUser = localStorage.getItem("username");
+
+if (savedUser) {
+  homeScreen.style.display = "none";
+  gameScreen.style.display = "block";
+}
+
+startBtn.addEventListener("click", () => {
+  const name = document.getElementById("username").value.trim();
+
+  if (!name) {
+    alert("Enter username");
+    return;
+  }
+
+  localStorage.setItem("username", name);
+
+  homeScreen.style.display = "none";
+  gameScreen.style.display = "block";
+});
 
 const score1El = document.getElementById("score1");
 const score2El = document.getElementById("score2");
