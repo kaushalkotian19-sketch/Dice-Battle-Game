@@ -1,3 +1,4 @@
+let level = 1;
 const coinsEl = document.getElementById("coins");
 const diceSound = new Audio("./assets/dice.mp3");
 
@@ -114,4 +115,7 @@ diceBtn.addEventListener("click", () => {
   // 💾 SAVE coins (ADD THIS LINE HERE)
 localStorage.setItem("coins", coins);
 
+  // 🏆 LEVEL SYSTEM (ADD HERE)
+level = Math.floor(coins / 100) + 1;
+document.title = "Level " + level + " | Dice Game";
 });
