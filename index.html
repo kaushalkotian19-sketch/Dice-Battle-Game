@@ -44,18 +44,38 @@
 
   <!-- 💼 WALLET (ONLY ONE) -->
   <div class="wallet-box">
-    <h3>💼 Wallet</h3>
 
-    <button onclick="connectWallet()">🦊 Connect Wallet</button>
-    <p id="wallet-address"></p>
+  <h3>💼 Wallet</h3>
 
+  <!-- CONNECT -->
+  <button class="connect-btn" onclick="connectWallet()">🦊 Connect Wallet</button>
+  <p id="wallet-address">Not connected</p>
+
+  <!-- BALANCE -->
+  <div class="wallet-balance">
     <p>💰 Coins: <span id="coins">100</span></p>
     <p>🪙 Tokens: <span id="tokens">0</span></p>
+  </div>
 
-    <div class="wallet-actions">
-      <button onclick="convertToTokens()">➡️ Convert to Token</button>
-      <button onclick="convertToCoins()">⬅️ Convert to Coins</button>
-    </div>
+  <!-- ACTIONS -->
+  <div class="wallet-actions">
+    <button onclick="convertToTokens()">➡️ Convert</button>
+    <button onclick="convertToCoins()">⬅️ Redeem</button>
+  </div>
+
+  <!-- DEPOSIT / WITHDRAW -->
+  <div class="wallet-extra">
+    <input type="number" id="amount" placeholder="Enter amount">
+    <button onclick="deposit()">💸 Deposit</button>
+    <button onclick="withdraw()">🏧 Withdraw</button>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="history">
+    <h4>📜 Transactions</h4>
+    <ul id="history-list"></ul>
+  </div>
+
   </div>
 
   <div class="disclaimer">
