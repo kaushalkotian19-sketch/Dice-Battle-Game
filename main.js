@@ -201,18 +201,22 @@ createParticles();
 // 💼 WALLET SYSTEM
 // =========================
 
-function convertToTokens() {
+async function convertToTokens() {
   if (coins < 10) {
     alert("Need at least 10 coins");
     return;
   }
 
   coins -= 10;
+
+  // simulate mint (for now)
   tokens += 1;
 
   updateWallet();
-}
 
+  // optional future: real mint
+  addHistory("🔄 Converted 10 coins → 1 token");
+}
 function convertToCoins() {
   if (tokens < 1) {
     alert("No tokens");
@@ -223,7 +227,9 @@ function convertToCoins() {
   coins += 10;
 
   updateWallet();
+  addHistory("🔄 Converted 1 tokens → 10 coins");
 }
+
 
 function updateWallet() {
   document.getElementById("coins").textContent = coins;
@@ -259,6 +265,9 @@ async function connectWallet() {
 
   document.getElementById("wallet-address").textContent =
     "Connected: " + userAddress.slice(0,6) + "..." + userAddress.slice(-4);
+
+
+await loadTokenBalance();
 }
 
 const tokenAddress = "0xYourTestTokenAddress"; // 👈 I will help you get this
@@ -282,6 +291,23 @@ async function loadTokenBalance() {
   document.getElementById("tokens").textContent = Math.floor(formatted);
 }
 
+async function sendTokens() {
+  const to = prompt("Enter receiver address:");
+  const amount = prompt("Enter amount:");
+
+  if (!to || !amount) return;
+
+  const tx = await tokenContract.transfer(
+    to,
+    ethers.utils.parseUnits(amount, 18)
+  );
+
+  await tx.wait();
+
+  alert("Transaction Successful 🚀");
+
+  loadTokenBalance();
+}
 // =========================
 // 💸 DEPOSIT / WITHDRAW
 // =========================
