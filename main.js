@@ -3,6 +3,7 @@ let tokens = Number(localStorage.getItem("tokens")) || 0;
 
 let level = 1;
 const coinsEl = document.getElementById("coins");
+const coinsGameEl = document.getElementById("coins-game");
 const diceSound = new Audio("./assets/dice.mp3");
 
 const diceBtn = document.getElementById("roll");
@@ -226,6 +227,10 @@ function convertToCoins() {
 
 function updateWallet() {
   document.getElementById("coins").textContent = coins;
+
+  const cg = document.getElementById("coins-game");
+  if (cg) cg.textContent = coins;
+
   document.getElementById("tokens").textContent = tokens;
 
   localStorage.setItem("coins", coins);
