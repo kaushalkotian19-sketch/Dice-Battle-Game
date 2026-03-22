@@ -254,3 +254,65 @@ async function connectWallet() {
   document.getElementById("wallet-address").textContent =
     "Connected: " + accounts[0];
 }
+
+// =========================
+// 💸 DEPOSIT / WITHDRAW
+// =========================
+
+function deposit() {
+  const amt = Number(document.getElementById("amount").value);
+
+  if (!amt || amt <= 0) {
+    alert("Enter valid amount");
+    return;
+  }
+
+  coins += amt;
+  updateWallet();
+  addHistory("💸 Deposited " + amt);
+}
+
+function withdraw() {
+  const amt = Number(document.getElementById("amount").value);
+
+  if (!amt || amt <= 0) {
+    alert("Enter valid amount");
+    return;
+  }
+
+  if (amt > coins) {
+    alert("Not enough balance");
+    return;
+  }
+
+  coins -= amt;
+  updateWallet();
+  addHistory("🏧 Withdrawn " + amt);
+}
+
+function addHistory(text) {
+  const list = document.getElementById("history-list");
+
+  const li = document.createElement("li");
+  li.textContent = text;
+
+  list.prepend(li);
+
+  let history = JSON.parse(localStorage.getItem("history")) || [];
+  history.unshift(text);
+
+  localStorage.setItem("history", JSON.stringify(history));
+}
+
+function loadHistory() {
+  const list = document.getElementById("history-list");
+  let history = JSON.parse(localStorage.getItem("history")) || [];
+
+  history.forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    list.appendChild(li);
+  });
+}
+
+loadHistory();
