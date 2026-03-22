@@ -168,3 +168,19 @@ function logout() {
   document.getElementById("home-screen").style.display = "block";
   document.getElementById("game-screen").style.display = "none";
 }
+
+function createParticles() {
+  const container = document.getElementById("particles");
+
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement("div");
+    p.classList.add("particle");
+
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.animationDuration = (5 + Math.random() * 5) + "s";
+
+    container.appendChild(p);
+  }
+}
+
+createParticles();
