@@ -95,6 +95,32 @@ h1 span {
   box-shadow: 0 0 20px rgba(255,255,255,0.2);
 }
 
+.bg-dice {
+  position: fixed;
+  width: 60px;   /* 🔥 reduced size */
+  opacity: 0.06; /* subtle background */
+  z-index: -1;
+  pointer-events: none;
+  animation: floatDice 12s ease-in-out infinite;
+}
+
+.dice1 {
+  top: 15%;
+  left: 5%;
+}
+
+.dice2 {
+  bottom: 15%;
+  right: 5%;
+  animation-delay: 4s;
+}
+
+@keyframes floatDice {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(180deg); }
+  100% { transform: translateY(0) rotate(360deg); }
+}
+
 /* ANIMATION */
 .roll {
   animation: spin 0.5s linear;
