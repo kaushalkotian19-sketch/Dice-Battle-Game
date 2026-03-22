@@ -7,24 +7,24 @@
   <link rel="stylesheet" href="./style.css">
 </head>
 
-  
 <body>
-  <div id="particles"></div>
+
+<div id="particles"></div>
 <img src="./assets/red-1.png" class="bg-dice dice1">
 <img src="./assets/green-1.png" class="bg-dice dice2">
+
+<!-- ================= HOME ================= -->
 <div id="home-screen" class="home">
 
   <h1 class="title">🎲 DICE <span>BATTLE</span></h1>
   <p class="tagline">⚡ Roll • Bet • Win ⚡</p>
 
-  <!-- FEATURES -->
   <div class="features">
     <div class="card">🎲 Roll the Dice<br><small>Play vs opponent</small></div>
     <div class="card">💰 Smart Bets<br><small>Risk & win coins</small></div>
     <div class="card">🏆 Level Up<br><small>Win & grow</small></div>
   </div>
 
-  <!-- HOW IT WORKS -->
   <div class="how">
     <h3>📊 How Betting Works</h3>
     <div class="steps">
@@ -35,100 +35,87 @@
     </div>
   </div>
 
-  <!-- LOGIN -->
   <div class="login-box">
     <h3>👤 Enter the Arena</h3>
     <input type="text" id="username" placeholder="Enter your username">
     <button id="start-btn">🚀 Start Playing</button>
-
     <p class="coins">💰 Starting Coins: 100</p>
   </div>
 
+  <!-- 💼 WALLET (ONLY ONE) -->
   <div class="wallet-box">
-  <h3>💼 Wallet</h3>
+    <h3>💼 Wallet</h3>
 
+    <button onclick="connectWallet()">🦊 Connect Wallet</button>
+    <p id="wallet-address"></p>
 
+    <p>💰 Coins: <span id="coins">100</span></p>
+    <p>🪙 Tokens: <span id="tokens">0</span></p>
 
-  <!-- 🦊 CONNECT -->
-  <button onclick="connectWallet()">🦊 Connect Wallet</button>
-  <p id="wallet-address"></p>
-
-  <p>💰 Coins: <span id="coins">100</span></p>
-  <p>🪙 Tokens: <span id="tokens">0</span></p>
-
-  <div class="wallet-actions">
-    <button onclick="convertToTokens()">➡️ Convert to Token</button>
-    <button onclick="convertToCoins()">⬅️ Convert to Coins</button>
-  </div>
+    <div class="wallet-actions">
+      <button onclick="convertToTokens()">➡️ Convert to Token</button>
+      <button onclick="convertToCoins()">⬅️ Convert to Coins</button>
     </div>
-
-  <p>💰 Coins: <span id="coins">100</span></p>
-  <p>🪙 Tokens: <span id="tokens">0</span></p>
-
-  <div class="wallet-actions">
-    <button onclick="convertToTokens()">➡️ Convert to Token</button>
-    <button onclick="convertToCoins()">⬅️ Convert to Coins</button>
-  </div>
   </div>
 
-  <!-- DISCLAIMER -->
   <div class="disclaimer">
     <h4>🛡 Disclaimer</h4>
     <p>This game is for entertainment only. No real money involved.</p>
   </div>
 
 </div>
-  
-<div id="game-screen" style="display:none;">
-  <h1>🎲 Dice Battle Game</h1>
 
+<!-- ================= GAME ================= -->
+<div id="game-screen" style="display:none;">
+
+  <h1>🎲 Dice Battle Game</h1>
   <button onclick="logout()">Logout</button>
+
   <div class="game">
 
+    <div class="players-row">
 
-
-  <div class="players-row">
-
-    <div class="player player1">
-      <div class="p1">PLAYER 1</div>
-      <div class="dice">
-        <img id="dice1" src="./assets/red-1.png">
+      <div class="player player1">
+        <div class="p1">PLAYER 1</div>
+        <div class="dice">
+          <img id="dice1" src="./assets/red-1.png">
+        </div>
+        <p>Dice: <span id="score1">0</span></p>
       </div>
-      <p>Dice: <span id="score1">0</span></p>
+
+      <div class="vs">VS</div>
+
+      <div class="player player2">
+        <div class="p2">PLAYER 2</div>
+        <div class="dice">
+          <img id="dice2" src="./assets/green-1.png">
+        </div>
+        <p>Dice: <span id="score2">0</span></p>
+      </div>
+
     </div>
 
-    <div class="vs">VS</div>
-
-    <div class="player player2">
-      <div class="p2">PLAYER 2</div>
-      <div class="dice">
-        <img id="dice2" src="./assets/green-1.png">
-      </div>
-      <p>Dice: <span id="score2">0</span></p>
+    <div class="bet-box">
+      <input type="number" id="bet" placeholder="💰 Enter coins" />
     </div>
 
+    <button id="roll">🎲 Roll Dice</button>
+
+    <hr style="margin:40px 20px; opacity:0.2;">
+
+    <div class="totals">
+      <div>Player 1: <span id="p1-total">0</span></div>
+      <div>Player 2: <span id="p2-total">0</span></div>
+    </div>
+
+    <!-- 🔥 FIXED: separate ID -->
+    <p class="coins">💰 Coins: <span id="coins-game">100</span></p>
+
+    <p class="result">Roll to start</p>
+
   </div>
-
-  <div class="bet-box">
-    <input type="number" id="bet" placeholder="💰 Enter coins" />
-  </div>
-
-  <button id="roll">🎲 Roll Dice</button>
-
-  <hr style="margin:40px 20px; opacity:0.2;">
-
-  <div class="totals">
-    <div>Player 1: <span id="p1-total">0</span></div>
-    <div>Player 2: <span id="p2-total">0</span></div>
-  </div>
-
-  <p class="coins">💰 Coins: <span id="coins">100</span></p>
-
-  <p class="result">Roll to start</p>
-
 </div>
-</div> <!-- game -->
-</div> <!-- game-screen -->
+
 <div id="coin-animation"></div>
 
 <script src="main.js"></script>
