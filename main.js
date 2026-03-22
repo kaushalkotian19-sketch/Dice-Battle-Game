@@ -241,18 +241,24 @@ function updateWallet() {
 // 🦊 METAMASK CONNECT
 // =========================
 
+let provider;
+let signer;
+let userAddress;
+
 async function connectWallet() {
-  if (typeof window.ethereum === "undefined") {
+  if (!window.ethereum) {
     alert("Install MetaMask");
     return;
   }
 
-  const accounts = await window.ethereum.request({
-    method: "eth_requestAccounts",
-  });
+  provider = new ethers.providers.Web3Provider(window.ethereum);
+  await provider.send("eth_requestAccounts", []);
+
+  signer = provider.getSigner();
+  userAddress = await signer.getAddress();
 
   document.getElementById("wallet-address").textContent =
-    "Connected: " + accounts[0];
+    "Connected: " + userAddress.slice(0,6) + "..." + userAddress.slice(-4);
 }
 
 // =========================
