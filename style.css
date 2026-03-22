@@ -415,10 +415,11 @@ button:active {
 
 .particle {
   position: absolute;
-  width: 6px;
-  height: 6px;
-  background: rgba(0,255,150,0.7);
+  width: 4px;
+  height: 4px;
+  background: rgba(0,255,150,0.8);
   border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0,255,150,0.8);
   animation: floatUp linear infinite;
 }
 
@@ -433,5 +434,30 @@ button:active {
   to {
     transform: translateY(-10vh) scale(1);
     opacity: 0;
+  }
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background: radial-gradient(circle, rgba(0,255,150,0.08), transparent 60%),
+              radial-gradient(circle, rgba(0,150,255,0.08), transparent 60%);
+  animation: moveBg 20s linear infinite;
+  z-index: -2;
+}
+
+@keyframes moveBg {
+  0% {
+    transform: rotate(0deg) translate(0,0);
+  }
+  50% {
+    transform: rotate(180deg) translate(50px, 50px);
+  }
+  100% {
+    transform: rotate(360deg) translate(0,0);
   }
 }
