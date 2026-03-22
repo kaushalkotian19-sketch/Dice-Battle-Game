@@ -461,3 +461,53 @@ body::before {
     transform: rotate(360deg) translate(0,0);
   }
 }
+
+.wallet-box {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(0,255,150,0.2);
+}
+
+.connect-btn {
+  background: linear-gradient(45deg, #ff4d4d, #ff0000);
+  margin: 10px 0;
+}
+
+.wallet-balance p {
+  font-size: 18px;
+  margin: 5px 0;
+}
+
+.wallet-actions button {
+  margin: 5px;
+  background: #111;
+}
+
+.wallet-extra input {
+  width: 80%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  margin: 10px 0;
+}
+
+.wallet-extra button {
+  margin: 5px;
+  background: linear-gradient(45deg, #00ff88, #00cc66);
+}
+
+.history {
+  margin-top: 15px;
+  text-align: left;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.history li {
+  font-size: 14px;
+  margin: 4px 0;
+  opacity: 0.8;
+}
