@@ -1,4 +1,5 @@
-
+let coins = Number(localStorage.getItem("coins")) || 100;
+let tokens = Number(localStorage.getItem("tokens")) || 0;
 
 let level = 1;
 const coinsEl = document.getElementById("coins");
@@ -22,12 +23,22 @@ if (savedUser) {
 startBtn.addEventListener("click", () => {
   const name = document.getElementById("username").value.trim();
 
-  if (!name) {
-    alert("Enter username");
-    return;
-  }
+if (!name) {
+  alert("Enter username");
+  return;
+}
 
-  localStorage.setItem("username", name);
+// check existing users
+let users = JSON.parse(localStorage.getItem("users")) || [];
+
+if (users.includes(name)) {
+  alert("Username already taken");
+  return;
+}
+
+users.push(name);
+localStorage.setItem("users", JSON.stringify(users));
+localStorage.setItem("username", name);
 
   homeScreen.style.display = "none";
   gameScreen.style.display = "block";
@@ -44,7 +55,7 @@ const coinContainer = document.getElementById("coin-animation");
 
 let total1 = 0;
 let total2 = 0;
-let coins = Number(localStorage.getItem("coins"));
+
 
 if (!coins || isNaN(coins)) {
   coins = 100;
@@ -184,3 +195,57 @@ function createParticles() {
 }
 
 createParticles();
+
+// =========================
+// 💼 WALLET SYSTEM
+// =========================
+
+function convertToTokens() {
+  if (coins < 10) {
+    alert("Need at least 10 coins");
+    return;
+  }
+
+  coins -= 10;
+  tokens += 1;
+
+  updateWallet();
+}
+
+function convertToCoins() {
+  if (tokens < 1) {
+    alert("No tokens");
+    return;
+  }
+
+  tokens -= 1;
+  coins += 10;
+
+  updateWallet();
+}
+
+function updateWallet() {
+  document.getElementById("coins").textContent = coins;
+  document.getElementById("tokens").textContent = tokens;
+
+  localStorage.setItem("coins", coins);
+  localStorage.setItem("tokens", tokens);
+}
+
+// =========================
+// 🦊 METAMASK CONNECT
+// =========================
+
+async function connectWallet() {
+  if (typeof window.ethereum === "undefined") {
+    alert("Install MetaMask");
+    return;
+  }
+
+  const accounts = await window.ethereum.request({
+    method: "eth_requestAccounts",
+  });
+
+  document.getElementById("wallet-address").textContent =
+    "Connected: " + accounts[0];
+}
