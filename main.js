@@ -261,6 +261,27 @@ async function connectWallet() {
     "Connected: " + userAddress.slice(0,6) + "..." + userAddress.slice(-4);
 }
 
+const tokenAddress = "0xYourTestTokenAddress"; // 👈 I will help you get this
+
+const tokenABI = [
+  "function balanceOf(address owner) view returns (uint256)",
+  "function transfer(address to, uint amount) returns (bool)"
+];
+
+let tokenContract;
+
+async function loadTokenBalance() {
+  if (!signer) return;
+
+  tokenContract = new ethers.Contract(tokenAddress, tokenABI, signer);
+
+  const balance = await tokenContract.balanceOf(userAddress);
+
+  const formatted = ethers.utils.formatUnits(balance, 18);
+
+  document.getElementById("tokens").textContent = Math.floor(formatted);
+}
+
 // =========================
 // 💸 DEPOSIT / WITHDRAW
 // =========================
