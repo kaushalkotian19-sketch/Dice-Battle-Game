@@ -31,8 +31,8 @@ if (!name) {
 
 // check existing users
 function checkUsernameFlow() {
-  let users = JSON.parse(localStorage.getItem("users")) || {};
   
+
   if (users[userAddress]) {
     // already registered
     localStorage.setItem("username", users[userAddress]);
@@ -40,12 +40,10 @@ function checkUsernameFlow() {
     homeScreen.style.display = "none";
     gameScreen.style.display = "block";
   } else {
-    // ask username
     const name = prompt("Enter unique username:");
 
     if (!name) return;
 
-    // check uniqueness
     if (Object.values(users).includes(name)) {
       alert("Username already taken");
       return;
@@ -60,13 +58,6 @@ function checkUsernameFlow() {
   }
 }
 
-users.push(name);
-localStorage.setItem("users", JSON.stringify(users));
-localStorage.setItem("username", name);
-
-  homeScreen.style.display = "none";
-  gameScreen.style.display = "block";
-});
 
 const score1El = document.getElementById("score1");
 const score2El = document.getElementById("score2");
@@ -343,13 +334,8 @@ async function sendTokens() {
 // =========================
 
 function deposit() {
-  const amt = Number(document.getElementById("amount").value);
-
-  if (!amt || amt <= 0) {
-    alert("Enter valid amount");
-    return;
-  }
-
+  alert("Coming soon: real blockchain deposit 🚀");
+}
   coins += amt;
   updateWallet();
   addHistory("💸 Deposited " + amt);
