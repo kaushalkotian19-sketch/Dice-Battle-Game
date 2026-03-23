@@ -30,11 +30,34 @@ if (!name) {
 }
 
 // check existing users
-let users = JSON.parse(localStorage.getItem("users")) || [];
+function checkUsernameFlow() {
+  let users = JSON.parse(localStorage.getItem("users")) || {};
+  
+  if (users[userAddress]) {
+    // already registered
+    localStorage.setItem("username", users[userAddress]);
 
-if (users.includes(name)) {
-  alert("Username already taken");
-  return;
+    homeScreen.style.display = "none";
+    gameScreen.style.display = "block";
+  } else {
+    // ask username
+    const name = prompt("Enter unique username:");
+
+    if (!name) return;
+
+    // check uniqueness
+    if (Object.values(users).includes(name)) {
+      alert("Username already taken");
+      return;
+    }
+
+    users[userAddress] = name;
+    localStorage.setItem("users", JSON.stringify(users));
+    localStorage.setItem("username", name);
+
+    homeScreen.style.display = "none";
+    gameScreen.style.display = "block";
+  }
 }
 
 users.push(name);
@@ -253,23 +276,30 @@ let userAddress;
 
 async function connectWallet() {
   if (!window.ethereum) {
-    alert("Install MetaMask");
+    alert("Open inside MetaMask browser");
     return;
   }
 
-  provider = new ethers.providers.Web3Provider(window.ethereum);
-  await provider.send("eth_requestAccounts", []);
+  try {
+    const accounts = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
 
-  signer = provider.getSigner();
-  userAddress = await signer.getAddress();
+    userAddress = accounts[0];
 
-  document.getElementById("wallet-address").textContent =
-    "Connected: " + userAddress.slice(0,6) + "..." + userAddress.slice(-4);
+    document.getElementById("wallet-address").textContent =
+      "Connected: " +
+      userAddress.slice(0, 6) +
+      "..." +
+      userAddress.slice(-4);
 
+    await loadTokenBalance(); // ✅ IMPORTANT
 
-await loadTokenBalance();
+    checkUsernameFlow(); // ✅ new logic (explained below)
+  } catch (err) {
+    console.log(err);
+  }
 }
-
 const tokenAddress = "0xYourTestTokenAddress"; // 👈 I will help you get this
 
 const tokenABI = [
