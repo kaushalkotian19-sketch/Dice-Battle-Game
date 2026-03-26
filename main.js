@@ -84,38 +84,53 @@ function checkUsernameFlow() {
 // 🦊 METAMASK CONNECT
 // =========================
 async function connectWallet() {
-  if (!window.ethereum) {
-    alert("📱 Open inside MetaMask browser or install MetaMask");
-    return;
-  }
-
   try {
+    if (!window.ethereum) {
+      alert("Please open in MetaMask / Trust Wallet browser");
+      return;
+    }
+
+    // Request account
     const accounts = await window.ethereum.request({
       method: "eth_requestAccounts",
     });
 
-    // 🔥 IMPORTANT FIX
-    provider = new ethers.providers.Web3Provider(window.ethereum);
-    signer = provider.getSigner();
-
     userAddress = accounts[0];
 
+    await window.ethereum.request({
+  method: "wallet_switchEthereumChain",
+  params: [{ chainId: "0x38" }], // BNB Mainnet
+});
+
+    // ✅ SHOW ADDRESS FIRST (before ethers)
     document.getElementById("wallet-address").textContent =
       "Connected: " +
       userAddress.slice(0, 6) +
       "..." +
       userAddress.slice(-4);
 
-    await loadTokenBalance();
+    // ✅ SAFE INIT (avoid crash)
+    try {
+      provider = new ethers.providers.Web3Provider(window.ethereum);
+      signer = provider.getSigner();
+    } catch (e) {
+      console.log("Ethers init failed:", e);
+    }
+
+    // 🔥 IMPORTANT: DON'T BREAK IF TOKEN FAILS
+    try {
+      await loadTokenBalance();
+    } catch (e) {
+      console.log("Token load skipped");
+    }
 
     checkUsernameFlow();
 
   } catch (err) {
-    console.log(err);
-    alert("Wallet connection failed");
+    console.error("Wallet Error:", err);
+    alert("Connection failed — try again inside wallet browser");
   }
 }
-
 // =========================
 // 🪙 TOKEN SYSTEM (SAFE)
 // =========================
