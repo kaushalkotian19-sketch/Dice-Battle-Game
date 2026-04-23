@@ -1,128 +1,55 @@
-:root {
-  --neon-green: #00ff88;
-  --neon-red: #ff4d4d;
-  --gold: #ffd700;
-}
+/* ... Keep previous styles ... */
 
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: radial-gradient(circle at center, #0a1128, #000);
-  color: white;
-  text-align: center;
-  min-height: 100vh;
+.bet-box-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-}
-
-/* --- THE FIX FOR OVERSIZED DICE --- */
-.dice {
-  display: flex;
-  justify-content: center;
-  padding: 10px 0;
-}
-
-.dice img {
-  width: 100%;
-  max-width: 80px; /* Limits the size so it doesn't overflow */
-  height: auto;
-  border-radius: 12px;
-  filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
-}
-
-.dice-rolling {
-  animation: shake 0.15s infinite;
-}
-
-@keyframes shake {
-  0% { transform: rotate(0deg); }
-  25% { transform: rotate(8deg); }
-  75% { transform: rotate(-8deg); }
-  100% { transform: rotate(0deg); }
-}
-
-/* --- LAYOUT --- */
-.game {
-  width: 95%;
-  max-width: 400px;
-  margin: auto;
-  background: rgba(255,255,255,0.03);
-  padding: 20px;
-  border-radius: 30px;
-  backdrop-filter: blur(10px);
-}
-
-.players-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.player {
-  background: rgba(255,255,255,0.07);
-  padding: 10px;
-  border-radius: 20px;
-  width: 42%;
-  transition: 0.3s;
-}
-
-.win-glow {
-  box-shadow: 0 0 25px var(--gold);
-  border: 1px solid var(--gold);
-}
-
-.status-bar {
-    display: flex;
-    justify-content: space-around;
-    background: rgba(0,0,0,0.5);
-    padding: 12px;
-    border-radius: 15px;
-    margin: 15px 0;
-}
-
-/* --- BUTTONS --- */
-button {
-  padding: 12px 20px;
-  border-radius: 12px;
-  border: none;
-  background: var(--neon-red);
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.bet-box {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
+  gap: 12px;
+  margin: 15px 0;
 }
 
 #bet {
-  width: 80px;
+  width: 100%;
   padding: 12px;
   border-radius: 12px;
-  border: none;
+  border: 1px solid #444;
+  background: #222;
+  color: white;
   text-align: center;
 }
 
-.powerup-shop {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 15px;
+.roll-actions {
+  display: flex;
+  gap: 10px;
 }
 
-.powerup-shop button {
-    font-size: 11px;
-    background: #1a1a1a;
-    border: 1px solid #333;
+.roll-actions button {
+  flex: 1;
+  padding: 15px;
+  font-size: 16px;
+  border-radius: 15px;
 }
 
-.badge {
-    background: var(--gold);
-    color: black;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-weight: bold;
+.btn-standard {
+  background: #ff4d4d;
+  box-shadow: 0 5px 15px rgba(255, 77, 77, 0.4);
+}
+
+.btn-berserk {
+  background: linear-gradient(45deg, #ff8c00, #ff0000);
+  box-shadow: 0 0 20px rgba(255, 140, 0, 0.6);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* THE FIX FOR OVERSIZED DICE IN SCREENSHOTS */
+.dice img {
+  width: 100%;
+  max-width: 80px; 
+  height: auto;
+  border-radius: 12px;
 }
