@@ -13,23 +13,9 @@
 
 <div id="home-screen" class="home">
   <h1 class="title">🎲 DICE <span>BATTLE</span></h1>
-  <p class="tagline">⚡ Roll • Bet • Conquer ⚡</p>
-
   <div class="login-box">
-    <h3>👤 Enter the Arena</h3>
     <button class="connect-btn" onclick="connectWallet()">🦊 Connect MetaMask</button>
     <p id="wallet-address">Not connected</p>
-  </div>
-
-  <div class="wallet-box">
-    <div class="wallet-balance">
-      <p>💰 Coins: <span id="coins">100</span></p>
-      <p>🪙 Tokens: <span id="tokens">0</span></p>
-    </div>
-    <div class="wallet-actions">
-      <button onclick="convertToTokens()">➡️ Tokenize</button>
-      <button onclick="convertToCoins()">⬅️ Redeem</button>
-    </div>
   </div>
 </div>
 
@@ -60,22 +46,22 @@
     </div>
 
     <div class="status-bar">
-        <div id="streak-info">Streak: 🔥 <span id="win-streak">0</span></div>
-        <div id="multiplier-info">Bonus: <span id="multiplier">1x</span></div>
+        <div>🔥 <span id="win-streak">0</span></div>
+        <div>Bonus: <span id="multiplier">1x</span></div>
     </div>
 
     <div class="bet-box">
-      <input type="number" id="bet" placeholder="Bet Amount" min="1">
-      <button id="roll">🎲 ROLL DICE</button>
+      <input type="number" id="bet" placeholder="Bet" min="1" value="10">
+      <button id="roll">🎲 ROLL</button>
     </div>
 
     <div class="powerup-shop">
-        <button onclick="buyPowerUp('shield')" title="Protects 50% of loss">🛡️ Shield (20c)</button>
-        <button onclick="buyPowerUp('loaded')" title="Min roll becomes 3">🎲 Loaded (30c)</button>
+        <button onclick="buyPowerUp('shield')">🛡️ Shield (20c)</button>
+        <button onclick="buyPowerUp('loaded')">🎲 Loaded (30c)</button>
     </div>
 
     <p class="coins">Balance: 💰 <span id="coins-game">100</span></p>
-    <p class="result">Place your bet!</p>
+    <p class="result">Ready to Battle?</p>
   </div>
 </div>
 
