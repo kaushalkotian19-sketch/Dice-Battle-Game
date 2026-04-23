@@ -131,3 +131,20 @@ function updateUI() {
 }
 
 function logout() { location.reload(); }
+
+function claimDaily() {
+    const lastClaim = localStorage.getItem("lastClaim");
+    const now = new Date().getTime();
+    
+    if (lastClaim && now - lastClaim < 86400000) { // 24 hours
+        alert("Come back tomorrow for more coins!");
+        return;
+    }
+
+    const reward = Math.floor(Math.random() * 50) + 10;
+    coins += reward;
+    localStorage.setItem("lastClaim", now);
+    alert(`🎁 Daily Chest Opened! You found ${reward} coins!`);
+    updateUI();
+}
+
