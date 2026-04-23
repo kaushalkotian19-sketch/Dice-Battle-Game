@@ -1,188 +1,119 @@
 // =========================
-// 💰 STATE & STORAGE INIT
+// 💰 INITIALIZE DATA
 // =========================
 let coins = Number(localStorage.getItem("coins")) || 100;
 let tokens = Number(localStorage.getItem("tokens")) || 0;
 let winStreak = 0;
 let currentLevel = Number(localStorage.getItem("level")) || 1;
 let activePowerUp = null;
-let userAddress = null;
 
 // =========================
-// 🔊 AUDIO SYSTEM
+// 👤 SIMPLE LOGIN SYSTEM
 // =========================
-const sounds = {
-    roll: new Audio('./audio/roll.mp3'),
-    win: new Audio('./audio/win.mp3'),
-    lose: new Audio('./audio/lose.mp3'),
-    fail: new Audio('./audio/fail.mp3')
-};
-
-// =========================
-// 🦊 METAMASK CONNECT
-// =========================
-async function connectWallet() {
-    try {
-        if (!window.ethereum) {
-            alert("Please open in MetaMask / Trust Wallet browser");
-            return;
-        }
-
-        const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-        userAddress = accounts[0];
-
-        document.getElementById("wallet-address").textContent = 
-            "Connected: " + userAddress.slice(0, 6) + "..." + userAddress.slice(-4);
-
-        // Hide home, show game
-        document.getElementById("home-screen").style.display = "none";
-        document.getElementById("game-screen").style.display = "block";
-        
-        updateUI();
-    } catch (err) {
-        console.error("Wallet Error:", err);
+function handleSimpleLogin() {
+    const nameInput = document.getElementById("username-input").value;
+    if (!nameInput) {
+        alert("Please enter a name to play!");
+        return;
     }
+    
+    localStorage.setItem("username", nameInput);
+    document.getElementById("display-username").textContent = nameInput;
+    
+    document.getElementById("home-screen").style.display = "none";
+    document.getElementById("game-screen").style.display = "block";
+    updateUI();
 }
 
 // =========================
-// 🎲 BATTLE ENGINE
+// 🎲 BATTLE LOGIC
 // =========================
-const diceBtnStandard = document.getElementById("roll");
-const diceBtnBerserk = document.getElementById("berserk");
-const resultText = document.querySelector(".result");
-
-if(diceBtnStandard) diceBtnStandard.addEventListener("click", () => startBattle('standard'));
-if(diceBtnBerserk) diceBtnBerserk.addEventListener("click", () => startBattle('berserk'));
-
-async function startBattle(type) {
-    const betInput = document.getElementById("bet");
-    const bet = Number(betInput.value);
+function startBattle(type) {
+    const bet = Number(document.getElementById("bet").value);
+    const resultText = document.querySelector(".result");
 
     if (bet <= 0 || bet > coins) {
-        alert("Check your bet amount or balance!");
+        alert("Check your bet amount!");
         return;
     }
 
-    // Play roll sound
-    sounds.roll.currentTime = 0;
-    sounds.roll.play().catch(() => {});
+    // Roll Logic
+    let p1Roll;
+    if (type === 'berserk') {
+        p1Roll = Math.floor(Math.random() * 12) + 1; // 1-12 range
+    } else {
+        p1Roll = (activePowerUp === 'loaded') ? Math.floor(Math.random() * 4) + 3 : Math.floor(Math.random() * 6) + 1;
+    }
 
-    // Lock UI
-    toggleButtons(true);
-    resultText.textContent = type === 'berserk' ? "🔥 BERSERK MODE! 🔥" : "Rolling...";
+    const p2Roll = Math.floor(Math.random() * 6) + 1;
 
-    const d1 = document.getElementById("dice1");
-    const d2 = document.getElementById("dice2");
-    d1.classList.add("dice-rolling");
-    d2.classList.add("dice-rolling");
+    // Visual Update
+    document.getElementById("dice1").src = `./assets/red-${p1Roll > 6 ? 6 : p1Roll}.png`;
+    document.getElementById("dice2").src = `./assets/green-${p2Roll}.png`;
+    document.getElementById("score1").textContent = p1Roll;
+    document.getElementById("score2").textContent = p2Roll;
 
-    setTimeout(() => {
-        d1.classList.remove("dice-rolling");
-        d2.classList.remove("dice-rolling");
-
-        // Logic for Player Roll
-        let roll1;
-        if (type === 'berserk') {
-            roll1 = Math.floor(Math.random() * 12) + 1; 
-        } else {
-            roll1 = (activePowerUp === 'loaded') ? Math.floor(Math.random() * 4) + 3 : Math.floor(Math.random() * 6) + 1;
-        }
-
-        const roll2 = Math.floor(Math.random() * 6) + 1;
-
-        // Update Images (Capped at 6 for visual assets)
-        d1.src = `./assets/red-${roll1 > 6 ? 6 : roll1}.png`;
-        d2.src = `./assets/green-${roll2}.png`;
-
-        document.getElementById("score1").textContent = roll1;
-        document.getElementById("score2").textContent = roll2;
-
-        handleResult(roll1, roll2, bet, type);
-        toggleButtons(false);
-    }, 1000);
-}
-
-// =========================
-// 🏆 RESULT PROCESSING
-// =========================
-function handleResult(p1, p2, bet, type) {
-    const p1Card = document.getElementById("p1-card");
-    const p2Card = document.getElementById("p2-card");
-
-    if (type === 'berserk' && p1 <= 3) {
+    // Process Result
+    if (type === 'berserk' && p1Roll <= 3) {
         coins -= (bet * 2);
-        resultText.textContent = "💀 CRITICAL FAIL! (Lost 2x)";
-        sounds.fail.play();
+        resultText.textContent = "💀 BERSERK FAIL! Lost 2x Bet!";
         winStreak = 0;
     } 
-    else if (p1 > p2) {
+    else if (p1Roll > p2Roll) {
         winStreak++;
-        let bonus = winStreak >= 3 ? 2 : 1; 
-        coins += (bet * bonus);
-        resultText.textContent = `VICTORY! +${bet * bonus}`;
-        sounds.win.play();
-        p1Card.classList.add("win-glow");
+        let multiplier = winStreak >= 3 ? 2 : 1;
+        coins += (bet * multiplier);
+        resultText.textContent = `VICTORY! +${bet * multiplier} coins`;
         if (winStreak % 5 === 0) currentLevel++;
     } 
-    else if (p2 > p1) {
+    else if (p2Roll > p1Roll) {
         winStreak = 0;
         let loss = (activePowerUp === 'shield') ? Math.floor(bet / 2) : bet;
         coins -= loss;
-        resultText.textContent = (activePowerUp === 'shield') ? "🛡️ Shielded Loss!" : "DEFEATED!";
-        sounds.lose.play();
-        p2Card.classList.add("win-glow");
+        resultText.textContent = activePowerUp === 'shield' ? "🛡️ Shield Saved You!" : "DEFEAT!";
     } 
     else {
-        resultText.textContent = "🤝 DRAW!";
+        resultText.textContent = "DRAW!";
     }
 
     activePowerUp = null;
     updateUI();
-
-    setTimeout(() => {
-        p1Card.classList.remove("win-glow");
-        p2Card.classList.remove("win-glow");
-    }, 2000);
 }
 
 // =========================
-// 🛒 POWER-UP SHOP
+// 🔄 WALLET & UI SYNC
 // =========================
-function buyPowerUp(type) {
-    const cost = type === 'shield' ? 20 : 30;
-    if (coins < cost) {
-        alert("Not enough coins!");
-        return;
-    }
-    coins -= cost;
-    activePowerUp = type;
-    alert(`${type.toUpperCase()} activated!`);
+function convertToTokens() {
+    if (coins < 10) return alert("Need 10 coins!");
+    coins -= 10;
+    tokens += 1;
     updateUI();
 }
 
-// =========================
-// 🔄 UI SYNC
-// =========================
+function convertToCoins() {
+    if (tokens < 1) return alert("No tokens!");
+    tokens -= 1;
+    coins += 10;
+    updateUI();
+}
+
 function updateUI() {
-    const coinEls = [document.getElementById("coins"), document.getElementById("coins-game")];
-    coinEls.forEach(el => { if(el) el.textContent = coins; });
+    // Sync all coin/token labels
+    const ids = ["coins", "coins-game", "win-streak", "lvl-num", "tokens"];
+    const values = [coins, coins, winStreak, currentLevel, tokens];
     
-    document.getElementById("win-streak").textContent = winStreak;
-    document.getElementById("multiplier").textContent = winStreak >= 3 ? "2x 🔥" : "1x";
-    document.getElementById("lvl-num").textContent = currentLevel;
+    ids.forEach((id, i) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = values[i];
+    });
 
     localStorage.setItem("coins", coins);
+    localStorage.setItem("tokens", tokens);
     localStorage.setItem("level", currentLevel);
 }
 
-function toggleButtons(disabled) {
-    if(diceBtnStandard) diceBtnStandard.disabled = disabled;
-    if(diceBtnBerserk) diceBtnBerserk.disabled = disabled;
-}
+// Attach Event Listeners
+document.getElementById("roll")?.addEventListener("click", () => startBattle('standard'));
+document.getElementById("berserk")?.addEventListener("click", () => startBattle('berserk'));
 
-function logout() {
-    location.reload();
-}
-
-// Initial UI Sync
 updateUI();
