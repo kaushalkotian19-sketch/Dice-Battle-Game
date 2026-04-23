@@ -35,9 +35,7 @@
         <div class="dice"><img id="dice1" src="./assets/red-1.png"></div>
         <p>Roll: <span id="score1">0</span></p>
       </div>
-
       <div class="vs">VS</div>
-
       <div class="player player2" id="p2-card">
         <div class="p2">OPPONENT</div>
         <div class="dice"><img id="dice2" src="./assets/green-1.png"></div>
@@ -46,13 +44,16 @@
     </div>
 
     <div class="status-bar">
-        <div>🔥 <span id="win-streak">0</span></div>
+        <div>🔥 Streak: <span id="win-streak">0</span></div>
         <div>Bonus: <span id="multiplier">1x</span></div>
     </div>
 
-    <div class="bet-box">
+    <div class="bet-box-container">
       <input type="number" id="bet" placeholder="Bet" min="1" value="10">
-      <button id="roll">🎲 ROLL</button>
+      <div class="roll-actions">
+        <button id="roll" class="btn-standard">🎲 Standard</button>
+        <button id="berserk" class="btn-berserk">⚡ Berserk</button>
+      </div>
     </div>
 
     <div class="powerup-shop">
@@ -61,7 +62,7 @@
     </div>
 
     <p class="coins">Balance: 💰 <span id="coins-game">100</span></p>
-    <p class="result">Ready to Battle?</p>
+    <p class="result">Choose your roll style!</p>
   </div>
 </div>
 
