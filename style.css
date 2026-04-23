@@ -1,25 +1,26 @@
-/* =========================
-   🌑 GLOBAL & BACKGROUND
-   ========================= */
+/* =========================================
+   🌑 GLOBAL STYLES & RESET
+   ========================================= */
 :root {
-  --primary-green: #00ff88;
   --primary-red: #ff4d4d;
-  --gold: #fbbf24;
-  --glass: rgba(255, 255, 255, 0.05);
+  --primary-gold: #fbbf24;
+  --berserk-pink: #f093fb;
+  --berserk-purple: #f5576c;
+  --glass-bg: rgba(255, 255, 255, 0.05);
   --glass-border: rgba(255, 255, 255, 0.1);
 }
 
 * {
   box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent; /* Fixes blue flash on mobile tap */
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Roboto, sans-serif;
-  background: #05070a; /* Fallback */
-  background: radial-gradient(circle at center, #0a0f1f, #02040a);
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: #05070a;
+  background: radial-gradient(circle at center, #0a132e, #02040a);
   color: white;
   min-height: 100vh;
   display: flex;
@@ -28,7 +29,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Moving Background Aura */
+/* Moving Aura Background Effect */
 body::before {
   content: "";
   position: fixed;
@@ -36,47 +37,45 @@ body::before {
   height: 200%;
   top: -50%;
   left: -50%;
-  background: radial-gradient(circle, rgba(0,255,150,0.05), transparent 60%);
-  animation: moveBg 20s linear infinite;
-  z-index: -2;
+  background: radial-gradient(circle, rgba(0, 255, 136, 0.03) 0%, transparent 50%);
+  animation: moveBg 25s linear infinite;
+  z-index: -1;
 }
 
 @keyframes moveBg {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-/* =========================
-   🏠 HOME & LOGIN STYLES
-   ========================= */
+/* =========================================
+   🏠 HOME SCREEN / LOGIN
+   ========================================= */
 .home {
   width: 90%;
   max-width: 400px;
   text-align: center;
-  padding-top: 40px;
-  animation: fadeIn 0.6s ease;
+  padding-top: 50px;
 }
 
 .title {
-  font-size: 42px;
-  font-weight: 800;
-  letter-spacing: -1px;
-  margin-bottom: 5px;
+  font-size: 38px;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .title span {
-  color: var(--gold);
-  text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+  color: var(--primary-gold);
+  text-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
 }
 
 .login-box {
-  background: var(--glass);
+  background: var(--glass-bg);
   backdrop-filter: blur(15px);
   border: 1px solid var(--glass-border);
-  padding: 30px;
-  border-radius: 24px;
+  padding: 25px;
+  border-radius: 25px;
   margin-top: 30px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
 }
 
 .login-box input {
@@ -84,121 +83,195 @@ body::before {
   padding: 15px;
   border-radius: 12px;
   border: 1px solid var(--glass-border);
-  background: rgba(0,0,0,0.2);
+  background: rgba(0, 0, 0, 0.3);
   color: white;
   text-align: center;
   font-size: 16px;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
-/* =========================
-   🎮 GAME ARENA STYLES
-   ========================= */
+.connect-btn {
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+  background: var(--primary-gold);
+  color: #000;
+  font-weight: 900;
+  border: none;
+  cursor: pointer;
+}
+
+/* =========================================
+   🎮 GAME ARENA
+   ========================================= */
 .game-container {
   width: 95%;
   max-width: 420px;
-  margin: 20px auto;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.03);
+  margin: 15px auto;
+  background: rgba(255, 255, 255, 0.02);
   border-radius: 30px;
   border: 1px solid var(--glass-border);
+  padding: 20px;
+  backdrop-filter: blur(10px);
 }
 
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.badge {
+  background: var(--primary-gold);
+  color: black;
+  padding: 2px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* DICE ROW */
 .players-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 15px;
-  margin: 20px 0;
+  gap: 10px;
+  margin: 15px 0;
 }
 
 .player {
   flex: 1;
   background: rgba(255, 255, 255, 0.05);
-  padding: 15px;
   border-radius: 20px;
-  text-align: center;
-  border: 1px solid var(--glass-border);
+  padding: 15px 5px;
+  border: 1px solid transparent;
+  transition: 0.3s;
 }
 
 .dice img {
   width: 100%;
-  max-width: 90px;
-  filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
-  transition: transform 0.2s;
+  max-width: 80px;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.4));
 }
 
 .vs {
   font-weight: 900;
   opacity: 0.2;
-  font-size: 24px;
+  font-size: 20px;
 }
 
-/* =========================
-   ⚡ BUTTONS & ACTIONS
-   ========================= */
-.btn-main {
+/* STATUS BAR */
+.status-bar {
+  display: flex;
+  justify-content: space-around;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 10px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-size: 13px;
+}
+
+/* =========================================
+   ⚡ BUTTONS & INPUTS
+   ========================================= */
+.bet-section input {
   width: 100%;
-  padding: 18px;
+  background: #111827;
+  border: 1px solid #374151;
+  color: white;
+  padding: 12px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.roll-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-main {
+  flex: 1;
+  padding: 16px;
   border-radius: 15px;
   border: none;
+  color: white;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 16px;
   cursor: pointer;
-  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  margin-bottom: 10px;
+  transition: transform 0.1s, box-shadow 0.2s;
 }
 
 .standard {
   background: linear-gradient(135deg, #ff5f6d, #ffc371);
-  box-shadow: 0 10px 20px rgba(255, 95, 109, 0.3);
+  box-shadow: 0 4px 15px rgba(255, 95, 109, 0.3);
 }
 
 .berserk {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  box-shadow: 0 10px 20px rgba(245, 87, 108, 0.3);
+  background: linear-gradient(135deg, var(--berserk-pink), var(--berserk-purple));
+  box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
 }
 
 .btn-main:active {
-  transform: scale(0.92);
+  transform: scale(0.95);
 }
 
-/* Shop Buttons */
+/* POWER-UP SHOP */
 .shop {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  display: flex;
+  gap: 8px;
   margin-top: 15px;
 }
 
 .btn-shop {
-  padding: 12px;
-  font-size: 13px;
-  background: rgba(255, 255, 255, 0.1);
+  flex: 1;
+  background: rgba(255, 255, 255, 0.08);
   border: 1px solid var(--glass-border);
-  color: #ccc;
-  border-radius: 12px;
+  color: #aaa;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 11px;
 }
 
-/* =========================
-   ✨ ANIMATIONS
-   ========================= */
-.win-glow {
-  animation: winnerGlow 1.5s infinite alternate;
+/* =========================================
+   🏆 ANIMATIONS
+   ========================================= */
+
+/* The Winning Glow we discussed */
+.winner-glow {
+  animation: goldPulse 1.5s infinite alternate;
+  border-color: var(--primary-gold) !important;
+  background: rgba(251, 191, 36, 0.1);
 }
 
-@keyframes winnerGlow {
-  from { box-shadow: 0 0 10px var(--gold); }
-  to { box-shadow: 0 0 30px var(--gold); }
+@keyframes goldPulse {
+  from {
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+    transform: scale(1);
+  }
+  to {
+    box-shadow: 0 0 25px rgba(251, 191, 36, 0.7);
+    transform: scale(1.03);
+  }
 }
 
 .dice-rolling {
-  animation: diceShake 0.1s infinite;
+  animation: shake 0.15s infinite;
 }
 
-@keyframes diceShake {
+@keyframes shake {
   0% { transform: rotate(0deg); }
   25% { transform: rotate(5deg); }
   75% { transform: rotate(-5deg); }
   100% { transform: rotate(0deg); }
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 12px;
+  cursor: pointer;
 }
