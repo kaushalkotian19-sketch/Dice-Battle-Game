@@ -8,15 +8,20 @@
 </head>
 <body>
 
-<div id="particles"></div>
+<div id="celebration-overlay" class="overlay" style="display:none;">
+    <div class="overlay-content">
+        <h1 class="glow-text">LEVEL UP!</h1>
+        <p>You've reached Level <span id="new-lvl">1</span></p>
+        <button class="connect-btn" onclick="closeOverlay()">CONTINUE</button>
+    </div>
+</div>
 
 <div id="home-screen" class="home">
   <h1 class="title">🎲 DICE <span>BATTLE</span></h1>
-  <p class="tagline">⚡ Roll • Bet • Conquer ⚡</p>
-
+  
   <div class="login-box">
-    <h3>👤 Player Entry</h3>
-    <input type="text" id="username-input" placeholder="Enter Nickname..." maxlength="12">
+    <button id="chest-btn" class="connect-btn" style="background:#4ade80; margin-bottom:15px;" onclick="claimDailyReward()">🎁 Daily Chest</button>
+    <input type="text" id="username-input" placeholder="Enter Nickname...">
     <button class="connect-btn" onclick="handleSimpleLogin()">🚀 Enter Arena</button>
   </div>
 
@@ -24,10 +29,6 @@
     <div class="wallet-balance">
       <p>💰 Coins: <span id="coins">100</span></p>
       <p>🪙 Tokens: <span id="tokens">0</span></p>
-    </div>
-    <div class="wallet-actions">
-      <button onclick="convertToTokens()">➡️ Convert</button>
-      <button onclick="convertToCoins()">⬅️ Redeem</button>
     </div>
   </div>
 </div>
@@ -45,20 +46,18 @@
 
     <div class="players-row">
       <div class="player" id="p1-card">
+        <div class="hp-container"><div id="p1-hp" class="hp-bar"></div></div>
         <div class="p-label">YOU</div>
-        <div class="dice">
-            <img id="dice1" src="./assets/red-1.png" alt="dice">
-        </div>
+        <div class="dice"><img id="dice1" src="./assets/red-1.png"></div>
         <p class="score-label">Roll: <span id="score1">0</span></p>
       </div>
 
       <div class="vs">VS</div>
 
       <div class="player" id="p2-card">
+        <div class="hp-container"><div id="p2-hp" class="hp-bar"></div></div>
         <div class="p-label">OPPONENT</div>
-        <div class="dice">
-            <img id="dice2" src="./assets/green-1.png" alt="dice">
-        </div>
+        <div class="dice"><img id="dice2" src="./assets/green-1.png"></div>
         <p class="score-label">Roll: <span id="score2">0</span></p>
       </div>
     </div>
