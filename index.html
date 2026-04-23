@@ -1,47 +1,23 @@
-<div id="game-screen" style="display:none;">
-  <div class="game-container">
-    
-    <div class="game-header">
-      <div><span id="display-username">Player</span> <span class="badge">LVL <span id="lvl-num">1</span></span></div>
-      <button onclick="logout()" style="background:none; color:#ef4444; font-size:12px; box-shadow:none; padding:0;">Logout</button>
-    </div>
+<div id="home-screen" class="home">
+  <h1 class="title">🎲 DICE <span>BATTLE</span></h1>
+  <p class="tagline">⚡ Roll • Bet • Win ⚡</p>
 
-    <div class="players-row">
-      <div class="player" id="p1-card">
-        <h4>YOU</h4>
-        <div class="dice"><img id="dice1" src="./assets/red-1.png"></div>
-        <p>Roll: <span id="score1">0</span></p>
-      </div>
-      <div class="vs">VS</div>
-      <div class="player" id="p2-card">
-        <h4>OPPONENT</h4>
-        <div class="dice"><img id="dice2" src="./assets/green-1.png"></div>
-        <p>Roll: <span id="score2">0</span></p>
-      </div>
-    </div>
+  <div class="login-box">
+    <h3>👤 Welcome to the Arena</h3>
+    <input type="text" id="username-input" placeholder="Enter your name">
+    <button id="start-btn" onclick="handleSimpleLogin()">🚀 Enter Game</button>
+    <p class="coins">💰 Starting Balance: 100</p>
+  </div>
 
-    <div class="status-bar">
-      <span>🔥 Streak: <b id="win-streak">0</b></span>
-      <span>Multiplier: <b id="multiplier">1x</b></span>
+  <div class="wallet-box">
+    <h3>💼 Local Wallet</h3>
+    <div class="wallet-balance">
+      <p>💰 Coins: <span id="coins">100</span></p>
+      <p>🪙 Tokens: <span id="tokens">0</span></p>
     </div>
-
-    <div class="bet-section">
-      <input type="number" id="bet" value="10" min="1">
-      <div class="roll-buttons">
-        <button id="roll" class="btn-main standard">🎲 Standard</button>
-        <button id="berserk" class="btn-main berserk">⚡ Berserk</button>
-      </div>
+    <div class="wallet-actions">
+      <button onclick="convertToTokens()">➡️ Convert (10:1)</button>
+      <button onclick="convertToCoins()">⬅️ Redeem (1:10)</button>
     </div>
-
-    <div class="shop">
-      <button id="shield-btn" class="btn-shop" onclick="buyPowerUp('shield')">🛡️ Shield (20c)</button>
-      <button id="loaded-btn" class="btn-shop" onclick="buyPowerUp('loaded')">🎲 Loaded (30c)</button>
-    </div>
-
-    <div style="margin-top: 20px;">
-      <p>Balance: <span style="color:#fbbf24; font-weight:bold;">💰 <span id="coins-game">100</span></span></p>
-      <p class="result">Ready to battle?</p>
-    </div>
-
   </div>
 </div>
