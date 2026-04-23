@@ -1,346 +1,140 @@
 // =========================
-// 💰 STORAGE INIT
+// 💰 STATE MANAGEMENT
 // =========================
 let coins = Number(localStorage.getItem("coins")) || 100;
 let tokens = Number(localStorage.getItem("tokens")) || 0;
-
-let level = 1;
+let winStreak = 0;
+let currentLevel = Number(localStorage.getItem("level")) || 1;
+let activePowerUp = null; // 'shield' or 'loaded'
 
 // =========================
-// 🎯 ELEMENTS
+// 🎯 UI ELEMENTS
 // =========================
-const coinsEl = document.getElementById("coins");
-const coinsGameEl = document.getElementById("coins-game");
-
 const diceBtn = document.getElementById("roll");
-const dice1 = document.getElementById("dice1");
-const dice2 = document.getElementById("dice2");
-
-const homeScreen = document.getElementById("home-screen");
-const gameScreen = document.getElementById("game-screen");
-const startBtn = document.getElementById("start-btn");
-
-const score1El = document.getElementById("score1");
-const score2El = document.getElementById("score2");
-
-const total1El = document.getElementById("p1-total");
-const total2El = document.getElementById("p2-total");
-
 const resultText = document.querySelector(".result");
-const coinContainer = document.getElementById("coin-animation");
+const streakEl = document.getElementById("win-streak");
+const multEl = document.getElementById("multiplier");
+const levelEl = document.getElementById("lvl-num");
 
 // =========================
-// 🎮 GAME STATE
+// 🦊 WALLET & LOGIN
 // =========================
-let total1 = 0;
-let total2 = 0;
-
-// =========================
-// 🦊 WALLET STATE
-// =========================
-let provider;
-let signer;
 let userAddress;
 
-// =========================
-// 🚀 START BUTTON (DISABLED)
-// =========================
-startBtn.addEventListener("click", () => {
-  alert("⚠️ Please connect wallet first");
-});
-
-// =========================
-// 🧠 USERNAME SYSTEM (WALLET BASED)
-// =========================
-function checkUsernameFlow() {
-  let users = JSON.parse(localStorage.getItem("users")) || {};
-
-  if (users[userAddress]) {
-    localStorage.setItem("username", users[userAddress]);
-
-    homeScreen.style.display = "none";
-    gameScreen.style.display = "block";
-  } else {
-    const name = prompt("Enter unique username:");
-
-    if (!name) return;
-
-    if (Object.values(users).includes(name)) {
-      alert("Username already taken");
-      return;
-    }
-
-    users[userAddress] = name;
-
-    localStorage.setItem("users", JSON.stringify(users));
-    localStorage.setItem("username", name);
-
-    homeScreen.style.display = "none";
-    gameScreen.style.display = "block";
-  }
-}
-
-// =========================
-// 🦊 METAMASK CONNECT
-// =========================
 async function connectWallet() {
-  try {
-    if (!window.ethereum) {
-      alert("Please open in MetaMask / Trust Wallet browser");
-      return;
-    }
-
-    // Request account
-    const accounts = await window.ethereum.request({
-      method: "eth_requestAccounts",
-    });
-
+    if (!window.ethereum) return alert("Install MetaMask!");
+    const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
     userAddress = accounts[0];
-
-    await window.ethereum.request({
-  method: "wallet_switchEthereumChain",
-  params: [{ chainId: "0x38" }], // BNB Mainnet
-});
-
-    // ✅ SHOW ADDRESS FIRST (before ethers)
-    document.getElementById("wallet-address").textContent =
-      "Connected: " +
-      userAddress.slice(0, 6) +
-      "..." +
-      userAddress.slice(-4);
-
-    // ✅ SAFE INIT (avoid crash)
-    try {
-      provider = new ethers.providers.Web3Provider(window.ethereum);
-      signer = provider.getSigner();
-    } catch (e) {
-      console.log("Ethers init failed:", e);
-    }
-
-    // 🔥 IMPORTANT: DON'T BREAK IF TOKEN FAILS
-    try {
-      await loadTokenBalance();
-    } catch (e) {
-      console.log("Token load skipped");
-    }
-
-    checkUsernameFlow();
-
-  } catch (err) {
-    console.error("Wallet Error:", err);
-    alert("Connection failed — try again inside wallet browser");
-  }
-}
-// =========================
-// 🪙 TOKEN SYSTEM (SAFE)
-// =========================
-const tokenAddress = "0xYourTestTokenAddress";
-
-const tokenABI = [
-  "function balanceOf(address owner) view returns (uint256)",
-  "function transfer(address to, uint amount) returns (bool)"
-];
-
-let tokenContract;
-
-async function loadTokenBalance() {
-  if (!signer) return;
-  if (!tokenAddress || tokenAddress === "0xYourTestTokenAddress") return;
-
-  tokenContract = new ethers.Contract(tokenAddress, tokenABI, signer);
-
-  const balance = await tokenContract.balanceOf(userAddress);
-  const formatted = ethers.utils.formatUnits(balance, 18);
-
-  document.getElementById("tokens").textContent = Math.floor(formatted);
-}
-
-async function sendTokens() {
-  if (!tokenContract) {
-    alert("Token not ready yet");
-    return;
-  }
-
-  const to = prompt("Enter receiver address:");
-  const amount = prompt("Enter amount:");
-
-  if (!to || !amount) return;
-
-  const tx = await tokenContract.transfer(
-    to,
-    ethers.utils.parseUnits(amount, 18)
-  );
-
-  await tx.wait();
-
-  alert("Transaction Successful 🚀");
-
-  loadTokenBalance();
+    document.getElementById("wallet-address").textContent = userAddress.slice(0,6)+"..."+userAddress.slice(-4);
+    
+    // Auto-enter game
+    document.getElementById("home-screen").style.display = "none";
+    document.getElementById("game-screen").style.display = "block";
+    updateWalletUI();
 }
 
 // =========================
-// 💰 WALLET (LOCAL)
-// =========================
-function convertToTokens() {
-  if (coins < 10) {
-    alert("Need at least 10 coins");
-    return;
-  }
-
-  coins -= 10;
-  tokens += 1;
-
-  updateWallet();
-  addHistory("🔄 10 coins → 1 token");
-}
-
-function convertToCoins() {
-  if (tokens < 1) {
-    alert("No tokens");
-    return;
-  }
-
-  tokens -= 1;
-  coins += 10;
-
-  updateWallet();
-  addHistory("🔄 1 token → 10 coins");
-}
-
-function updateWallet() {
-  coinsEl.textContent = coins;
-
-  if (coinsGameEl) coinsGameEl.textContent = coins;
-
-  document.getElementById("tokens").textContent = tokens;
-
-  localStorage.setItem("coins", coins);
-  localStorage.setItem("tokens", tokens);
-}
-
-// =========================
-// 🎲 GAME LOGIC
+// 🎲 CORE GAME LOGIC
 // =========================
 diceBtn.addEventListener("click", () => {
+    const bet = Number(document.getElementById("bet").value);
 
-  const bet = Number(document.getElementById("bet").value);
+    if (bet <= 0 || bet > coins) return alert("Invalid Bet!");
 
-  if (!bet || bet <= 0) {
-    alert("Enter valid coins");
-    return;
-  }
+    // Start Suspense
+    diceBtn.disabled = true;
+    resultText.textContent = "Rolling...";
+    document.getElementById("dice1").classList.add("dice-rolling");
+    document.getElementById("dice2").classList.add("dice-rolling");
+    document.getElementById("p1-card").classList.remove("win-glow");
+    document.getElementById("p2-card").classList.remove("win-glow");
 
-  if (bet > coins) {
-    alert("Not enough coins");
-    return;
-  }
+    // SUSPENSE DELAY (600ms)
+    setTimeout(() => {
+        const roll1 = getRoll();
+        const roll2 = Math.floor(Math.random() * 6) + 1;
 
-  const roll1 = Math.floor(Math.random() * 6) + 1;
-  const roll2 = Math.floor(Math.random() * 6) + 1;
+        // Update Images
+        document.getElementById("dice1").src = `./assets/red-${roll1}.png`;
+        document.getElementById("dice2").src = `./assets/green-${roll2}.png`;
+        document.getElementById("dice1").classList.remove("dice-rolling");
+        document.getElementById("dice2").classList.remove("dice-rolling");
 
-  dice1.src = `./assets/red-${roll1}.png`;
-  dice2.src = `./assets/green-${roll2}.png`;
+        document.getElementById("score1").textContent = roll1;
+        document.getElementById("score2").textContent = roll2;
 
-  score1El.textContent = roll1;
-  score2El.textContent = roll2;
-
-  if (roll1 > roll2) {
-    resultText.textContent = "🔥 Player 1 Wins!";
-    total1++;
-    coins += bet;
-    showCoins();
-  } else if (roll2 > roll1) {
-    resultText.textContent = "🔥 Player 2 Wins!";
-    total2++;
-    coins -= bet;
-  } else {
-    resultText.textContent = "🤝 Draw!";
-  }
-
-  total1El.textContent = total1;
-  total2El.textContent = total2;
-
-  updateWallet();
+        handleResult(roll1, roll2, bet);
+        diceBtn.disabled = false;
+    }, 800);
 });
 
-// =========================
-// 💸 DEPOSIT / WITHDRAW (SAFE)
-// =========================
-function deposit() {
-  alert("Coming soon: real blockchain deposit 🚀");
+function getRoll() {
+    if (activePowerUp === 'loaded') {
+        activePowerUp = null; // Reset after use
+        return Math.floor(Math.random() * 4) + 3; // Min roll 3
+    }
+    return Math.floor(Math.random() * 6) + 1;
 }
 
-function withdraw() {
-  const amt = Number(document.getElementById("amount").value);
+function handleResult(p1, p2, bet) {
+    if (p1 > p2) {
+        winStreak++;
+        let multiplier = winStreak >= 3 ? 2 : 1;
+        let winAmt = bet * multiplier;
+        
+        coins += winAmt;
+        resultText.textContent = `WINNER! +${winAmt} coins`;
+        document.getElementById("p1-card").classList.add("win-glow");
+        checkLevelUp();
+    } 
+    else if (p2 > p1) {
+        winStreak = 0;
+        let lossAmt = activePowerUp === 'shield' ? Math.floor(bet / 2) : bet;
+        coins -= lossAmt;
+        resultText.textContent = activePowerUp === 'shield' ? `Shielded! Lost only ${lossAmt}` : "Opponent Wins!";
+        document.getElementById("p2-card").classList.add("win-glow");
+        activePowerUp = null; 
+    } 
+    else {
+        resultText.textContent = "It's a Draw!";
+    }
 
-  if (!amt || amt <= 0) {
-    alert("Enter valid amount");
-    return;
-  }
-
-  if (amt > coins) {
-    alert("Not enough balance");
-    return;
-  }
-
-  coins -= amt;
-  updateWallet();
-  addHistory("🏧 Withdrawn " + amt);
-}
-
-// =========================
-// 📜 HISTORY
-// =========================
-function addHistory(text) {
-  const list = document.getElementById("history-list");
-
-  const li = document.createElement("li");
-  li.textContent = text;
-
-  list.prepend(li);
-
-  let history = JSON.parse(localStorage.getItem("history")) || [];
-  history.unshift(text);
-
-  localStorage.setItem("history", JSON.stringify(history));
-}
-
-function loadHistory() {
-  const list = document.getElementById("history-list");
-  let history = JSON.parse(localStorage.getItem("history")) || [];
-
-  history.forEach(item => {
-    const li = document.createElement("li");
-    li.textContent = item;
-    list.appendChild(li);
-  });
-}
-
-loadHistory();
-
-// =========================
-// ✨ COIN ANIMATION
-// =========================
-function showCoins() {
-  for (let i = 0; i < 6; i++) {
-    const coin = document.createElement("div");
-    coin.classList.add("coin");
-    coin.textContent = "💰";
-
-    coin.style.setProperty("--x", Math.random());
-    coin.style.setProperty("--y", Math.random());
-
-    coinContainer.appendChild(coin);
-    setTimeout(() => coin.remove(), 1000);
-  }
+    updateWalletUI();
 }
 
 // =========================
-// 🚪 LOGOUT
+// 🛒 POWER-UPS & PROGRESSION
 // =========================
+function buyPowerUp(type) {
+    const prices = { shield: 20, loaded: 30 };
+    if (coins < prices[type]) return alert("Not enough coins!");
+    
+    coins -= prices[type];
+    activePowerUp = type;
+    alert(`${type.toUpperCase()} Activated for next roll!`);
+    updateWalletUI();
+}
+
+function checkLevelUp() {
+    // Every 500 coins total might increase level
+    if (coins > currentLevel * 200) {
+        currentLevel++;
+        localStorage.setItem("level", currentLevel);
+        alert(`🎉 LEVEL UP! You are now Level ${currentLevel}`);
+    }
+}
+
+function updateWalletUI() {
+    document.getElementById("coins").textContent = coins;
+    document.getElementById("coins-game").textContent = coins;
+    document.getElementById("tokens").textContent = tokens;
+    streakEl.textContent = winStreak;
+    multEl.textContent = winStreak >= 3 ? "2x 🔥" : "1x";
+    levelEl.textContent = currentLevel;
+    
+    localStorage.setItem("coins", coins);
+}
+
 function logout() {
-  localStorage.removeItem("username");
-
-  homeScreen.style.display = "block";
-  gameScreen.style.display = "none";
+    location.reload();
 }
