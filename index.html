@@ -15,7 +15,7 @@
   <p class="tagline">⚡ Roll • Bet • Conquer ⚡</p>
 
   <div class="login-box">
-    <h3>👤 Player Profile</h3>
+    <h3>👤 Player Entry</h3>
     <input type="text" id="username-input" placeholder="Enter Nickname..." maxlength="12">
     <button class="connect-btn" onclick="handleSimpleLogin()">🚀 Enter Arena</button>
   </div>
@@ -30,8 +30,6 @@
       <button onclick="convertToCoins()">⬅️ Redeem</button>
     </div>
   </div>
-  
-  <p style="margin-top: 20px; font-size: 10px; opacity: 0.5;">No Wallet Required - Offline Mode</p>
 </div>
 
 <div id="game-screen" style="display:none;">
@@ -66,14 +64,12 @@
     </div>
 
     <div class="status-bar">
-        <div id="streak-info">🔥 Streak: <span id="win-streak">0</span></div>
-        <div id="multiplier-info">Bonus: <span id="multiplier">1x</span></div>
+        <div>🔥 Streak: <span id="win-streak">0</span></div>
+        <div>Bonus: <span id="multiplier">1x</span></div>
     </div>
 
     <div class="bet-section">
-      <label style="font-size: 12px; opacity: 0.7;">Enter Bet Amount</label>
       <input type="number" id="bet" value="10" min="1">
-      
       <div class="roll-buttons">
         <button id="roll" class="btn-main standard">🎲 Standard</button>
         <button id="berserk" class="btn-main berserk">⚡ Berserk</button>
@@ -81,21 +77,18 @@
     </div>
 
     <div class="shop">
-        <button id="shield-btn" class="btn-shop" onclick="buyPowerUp('shield')" title="Protects 50% of loss">🛡️ Shield (20c)</button>
-        <button id="loaded-btn" class="btn-shop" onclick="buyPowerUp('loaded')" title="Min roll becomes 3">🎲 Loaded (30c)</button>
+        <button id="shield-btn" class="btn-shop" onclick="buyPowerUp('shield')">🛡️ Shield (20c)</button>
+        <button id="loaded-btn" class="btn-shop" onclick="buyPowerUp('loaded')">🎲 Loaded (30c)</button>
     </div>
 
     <div class="footer-stats">
-      <p>Balance: <span style="color: #fbbf24; font-weight: bold;">💰 <span id="coins-game">100</span></span></p>
+      <p>Balance: 💰 <span id="coins-game">100</span></p>
       <p class="result">Ready to Battle?</p>
     </div>
 
   </div>
 </div>
 
-<div id="coin-animation"></div>
-
 <script src="main.js"></script>
-
 </body>
 </html>
