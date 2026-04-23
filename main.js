@@ -1,5 +1,5 @@
 // =========================
-// 💰 STATE & STORAGE
+// 💰 INITIALIZE DATA
 // =========================
 let coins = Number(localStorage.getItem("coins")) || 100;
 let tokens = Number(localStorage.getItem("tokens")) || 0;
@@ -8,19 +8,14 @@ let currentLevel = Number(localStorage.getItem("level")) || 1;
 let activePowerUp = null;
 
 // =========================
-// 👤 LOGIN & NAVIGATION
+// 👤 LOGIN SYSTEM
 // =========================
 function handleSimpleLogin() {
     const nameInput = document.getElementById("username-input").value;
-    if (!nameInput) {
-        alert("Please enter a nickname!");
-        return;
-    }
+    if (!nameInput) return alert("Please enter a nickname!");
     
     localStorage.setItem("username", nameInput);
     document.getElementById("display-username").textContent = nameInput;
-    
-    // Switch Screens
     document.getElementById("home-screen").style.display = "none";
     document.getElementById("game-screen").style.display = "block";
     updateUI();
@@ -30,133 +25,91 @@ function handleSimpleLogin() {
 // 🎲 BATTLE ENGINE
 // =========================
 function startBattle(type) {
-    const betInput = document.getElementById("bet");
-    const bet = Number(betInput.value);
+    const bet = Number(document.getElementById("bet").value);
     const resultText = document.querySelector(".result");
+    const p1Card = document.getElementById("p1-card");
+    const p2Card = document.getElementById("p2-card");
 
-    // Validation
-    if (bet <= 0 || bet > coins) {
-        alert("Invalid bet or insufficient balance!");
-        return;
-    }
+    if (bet <= 0 || bet > coins) return alert("Check your bet amount!");
 
-    // Determine Rolls
+    // Clear previous Winning Glows
+    p1Card.classList.remove("winner-glow");
+    p2Card.classList.remove("winner-glow");
+
+    // Logic for Rolls
     let p1Roll;
     if (type === 'berserk') {
-        // Berserk Mode: High risk, high reward (1-12 range)
-        p1Roll = Math.floor(Math.random() * 12) + 1;
+        p1Roll = Math.floor(Math.random() * 12) + 1; // 1-12 range
     } else {
-        // Standard Mode: 1-6 range (Min 3 if "Loaded" power-up active)
-        p1Roll = (activePowerUp === 'loaded') 
-            ? Math.floor(Math.random() * 4) + 3 
-            : Math.floor(Math.random() * 6) + 1;
+        p1Roll = (activePowerUp === 'loaded') ? Math.floor(Math.random() * 4) + 3 : Math.floor(Math.random() * 6) + 1;
     }
-
     const p2Roll = Math.floor(Math.random() * 6) + 1;
 
-    // Update Visuals
+    // Visual Update
     document.getElementById("dice1").src = `./assets/red-${p1Roll > 6 ? 6 : p1Roll}.png`;
     document.getElementById("dice2").src = `./assets/green-${p2Roll}.png`;
     document.getElementById("score1").textContent = p1Roll;
     document.getElementById("score2").textContent = p2Roll;
 
-    // Handle Results
+    // Process Result
     if (type === 'berserk' && p1Roll <= 3) {
-        // Critical Berserk Fail: Lose 2x the bet
         coins -= (bet * 2);
-        resultText.textContent = "💀 BERSERK FAIL! (Lost 2x)";
+        resultText.textContent = "💀 BERSERK FAIL! Lost 2x!";
         winStreak = 0;
+        p2Card.classList.add("winner-glow");
     } 
     else if (p1Roll > p2Roll) {
-        // Win Logic with Streak Bonus
         winStreak++;
         let multiplier = winStreak >= 3 ? 2 : 1;
         coins += (bet * multiplier);
         resultText.textContent = `VICTORY! +${bet * multiplier}`;
-        
-        // Level up every 5 wins
-        if (winStreak % 5 === 0) {
-            currentLevel++;
-            alert(`🎉 Level Up! You are now Level ${currentLevel}`);
-        }
+        p1Card.classList.add("winner-glow");
+        if (winStreak % 5 === 0) currentLevel++;
     } 
     else if (p2Roll > p1Roll) {
-        // Loss Logic with Shield Protection
         winStreak = 0;
         let loss = (activePowerUp === 'shield') ? Math.floor(bet / 2) : bet;
         coins -= loss;
-        resultText.textContent = activePowerUp === 'shield' ? "🛡️ Shielded Loss!" : "DEFEAT!";
+        resultText.textContent = activePowerUp === 'shield' ? "🛡️ Shield Saved You!" : "DEFEAT!";
+        p2Card.classList.add("winner-glow");
     } 
     else {
         resultText.textContent = "🤝 DRAW!";
     }
 
-    activePowerUp = null; // Power-up used
+    activePowerUp = null;
     updateUI();
 }
 
 // =========================
-// 🛒 POWER-UP SYSTEM
+// 🛒 SHOP & UI SYNC
 // =========================
 function buyPowerUp(type) {
     const cost = type === 'shield' ? 20 : 30;
-    if (coins < cost) {
-        alert("Not enough coins!");
-        return;
-    }
+    if (coins < cost) return alert("Not enough coins!");
     coins -= cost;
     activePowerUp = type;
-    alert(`🔥 ${type.toUpperCase()} activated for next roll!`);
-    updateUI();
-}
-
-// =========================
-// 🔄 DATA SYNC & UI
-// =========================
-function convertToTokens() {
-    if (coins < 10) return alert("Need 10 coins!");
-    coins -= 10;
-    tokens += 1;
-    updateUI();
-}
-
-function convertToCoins() {
-    if (tokens < 1) return alert("No tokens!");
-    tokens -= 1;
-    coins += 10;
+    alert(`${type.toUpperCase()} activated!`);
     updateUI();
 }
 
 function updateUI() {
-    // Update all dynamic text elements
-    const elements = {
-        "coins": coins,
-        "coins-game": coins,
-        "tokens": tokens,
-        "win-streak": winStreak,
-        "lvl-num": currentLevel,
-        "multiplier": winStreak >= 3 ? "2x 🔥" : "1x"
-    };
-
-    for (let id in elements) {
+    const ids = ["coins", "coins-game", "win-streak", "lvl-num", "tokens", "multiplier"];
+    const values = [coins, coins, winStreak, currentLevel, tokens, (winStreak >= 3 ? "2x 🔥" : "1x")];
+    
+    ids.forEach((id, i) => {
         const el = document.getElementById(id);
-        if (el) el.textContent = elements[id];
-    }
+        if (el) el.textContent = values[i];
+    });
 
-    // Save state
     localStorage.setItem("coins", coins);
     localStorage.setItem("tokens", tokens);
     localStorage.setItem("level", currentLevel);
 }
 
-function logout() {
-    localStorage.removeItem("username");
-    location.reload(); // Returns to home screen
-}
+function logout() { location.reload(); }
 
-// Initialize listeners
 document.getElementById("roll")?.addEventListener("click", () => startBattle('standard'));
 document.getElementById("berserk")?.addEventListener("click", () => startBattle('berserk'));
 
-// Initial Load
 updateUI();
