@@ -1,72 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dice Battle Elite</title>
-  <link rel="stylesheet" href="./style.css">
-</head>
-<body>
-
-<div id="particles"></div>
-
-<div id="home-screen" class="home">
-  <h1 class="title">🎲 DICE <span>BATTLE</span></h1>
-  <div class="login-box">
-    <button class="connect-btn" onclick="connectWallet()">🦊 Connect MetaMask</button>
-    <p id="wallet-address">Not connected</p>
-  </div>
-</div>
-
 <div id="game-screen" style="display:none;">
-  <div class="game-header">
-    <div class="user-stats">
-        <span id="display-username">Player</span> 
-        <span class="badge">LVL <span id="lvl-num">1</span></span>
+  <div class="game-container">
+    
+    <div class="game-header">
+      <div><span id="display-username">Player</span> <span class="badge">LVL <span id="lvl-num">1</span></span></div>
+      <button onclick="logout()" style="background:none; color:#ef4444; font-size:12px; box-shadow:none; padding:0;">Logout</button>
     </div>
-    <button class="logout-btn" onclick="logout()">Logout</button>
-  </div>
 
-  <div class="game">
     <div class="players-row">
-      <div class="player player1" id="p1-card">
-        <div class="p1">YOU</div>
+      <div class="player" id="p1-card">
+        <h4>YOU</h4>
         <div class="dice"><img id="dice1" src="./assets/red-1.png"></div>
         <p>Roll: <span id="score1">0</span></p>
       </div>
       <div class="vs">VS</div>
-      <div class="player player2" id="p2-card">
-        <div class="p2">OPPONENT</div>
+      <div class="player" id="p2-card">
+        <h4>OPPONENT</h4>
         <div class="dice"><img id="dice2" src="./assets/green-1.png"></div>
         <p>Roll: <span id="score2">0</span></p>
       </div>
     </div>
 
     <div class="status-bar">
-        <div>🔥 Streak: <span id="win-streak">0</span></div>
-        <div>Bonus: <span id="multiplier">1x</span></div>
+      <span>🔥 Streak: <b id="win-streak">0</b></span>
+      <span>Multiplier: <b id="multiplier">1x</b></span>
     </div>
 
-    <div class="bet-box-container">
-      <input type="number" id="bet" placeholder="Bet" min="1" value="10">
-      <div class="roll-actions">
-        <button id="roll" class="btn-standard">🎲 Standard</button>
-        <button id="berserk" class="btn-berserk">⚡ Berserk</button>
+    <div class="bet-section">
+      <input type="number" id="bet" value="10" min="1">
+      <div class="roll-buttons">
+        <button id="roll" class="btn-main standard">🎲 Standard</button>
+        <button id="berserk" class="btn-main berserk">⚡ Berserk</button>
       </div>
     </div>
 
-    <div class="powerup-shop">
-        <button onclick="buyPowerUp('shield')">🛡️ Shield (20c)</button>
-        <button onclick="buyPowerUp('loaded')">🎲 Loaded (30c)</button>
+    <div class="shop">
+      <button id="shield-btn" class="btn-shop" onclick="buyPowerUp('shield')">🛡️ Shield (20c)</button>
+      <button id="loaded-btn" class="btn-shop" onclick="buyPowerUp('loaded')">🎲 Loaded (30c)</button>
     </div>
 
-    <p class="coins">Balance: 💰 <span id="coins-game">100</span></p>
-    <p class="result">Choose your roll style!</p>
+    <div style="margin-top: 20px;">
+      <p>Balance: <span style="color:#fbbf24; font-weight:bold;">💰 <span id="coins-game">100</span></span></p>
+      <p class="result">Ready to battle?</p>
+    </div>
+
   </div>
 </div>
-
-<div id="coin-animation"></div>
-<script src="main.js"></script>
-</body>
-</html>
