@@ -1,237 +1,163 @@
-// =========================================
-// 💰 STATE MANAGEMENT
-// =========================================
-let coins = Number(localStorage.getItem("coins")) || 100;
+// --- STATE MANAGEMENT ---
+let coins = Number(localStorage.getItem("coins")) || 1000;
 let tokens = Number(localStorage.getItem("tokens")) || 0;
-let winStreak = 0;
-let currentLevel = Number(localStorage.getItem("level")) || 1;
-let activePowerUp = null;
-let p1HP = 100;
-let p2HP = 100;
+let level = Number(localStorage.getItem("level")) || 1;
+let upgrades = JSON.parse(localStorage.getItem("upgrades")) || { hp: 100, luck: 0, mult: 1 };
+let p1HP = upgrades.hp, p2HP = 100;
 
-// =========================================
-// 🔊 AUDIO MANAGER (Updated Paths)
-// =========================================
+// --- AUDIO ASSETS ---
 const sounds = {
-    bgm: new Audio('ambient_synth.mp3'),
     roll: new Audio('dice_roll.mp3'),
     win: new Audio('win_ding.mp3'),
     lose: new Audio('lose_thud.mp3'),
-    berserkHype: new Audio('heartbeat.mp3'),
-    levelUp: new Audio('level_up.mp3')
+    heartbeat: new Audio('heartbeat.mp3')
 };
+sounds.heartbeat.loop = true;
 
-// Global settings
-sounds.bgm.loop = true;
-sounds.bgm.volume = 0.3;
-
-/**
- * Plays the win sound with a pitch increase based on streak
- */
-function playWinSound(streak) {
-    const sound = sounds.win.cloneNode();
-    const pitch = Math.min(1 + (streak * 0.15), 2.5); // Higher pitch = more hype
-    sound.preservesPitch = false;
-    sound.playbackRate = pitch;
-    sound.play();
+// Unlocks audio for mobile browsers upon interaction
+function unlockAudio() {
+    Object.values(sounds).forEach(s => { 
+        s.play().then(() => { s.pause(); s.currentTime = 0; }).catch(() => {}); 
+    });
 }
 
-// =========================================
-// 👤 LOGIN & AUDIO INITIALIZATION
-// =========================================
-function handleSimpleLogin() {
-    // 1. Wake up the Audio Context (Crucial for Mobile Chrome/Safari)
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (AudioContext) {
-        const context = new AudioContext();
-        if (context.state === 'suspended') {
-            context.resume();
-        }
-    }
+// --- LOGIN & NAVIGATION ---
+function enterArena() {
+    const nameInput = document.getElementById("nickname-input");
+    const name = nameInput.value.trim() || "Warrior";
 
-    // 2. Play BGM
-    sounds.bgm.play().catch(err => console.warn("Audio blocked: Interaction needed."));
+    localStorage.setItem("dice_nickname", name);
+    document.getElementById("display-username").textContent = name;
 
-    // 3. UI Transition
-    const nameInput = document.getElementById("username-input").value;
-    if (!nameInput) return alert("Enter a name!");
-    
-    localStorage.setItem("username", nameInput);
-    document.getElementById("display-username").textContent = nameInput;
+    // Show game elements
     document.getElementById("home-screen").style.display = "none";
+    document.getElementById("game-nav").style.display = "flex";
     document.getElementById("game-screen").style.display = "block";
+    document.getElementById("wallet").style.display = "flex";
+
+    unlockAudio();
     updateUI();
 }
 
-// =========================================
-// 🎁 ECONOMY: DAILY REWARD
-// =========================================
-function claimDailyReward() {
-    const lastClaim = localStorage.getItem("lastClaim");
-    const now = Date.now();
-    
-    if (lastClaim && now - lastClaim < 86400000) {
-        const hoursLeft = Math.ceil((86400000 - (now - lastClaim)) / 3600000);
-        alert(`Chest is empty! Back in ${hoursLeft}h.`);
-        return;
-    }
-
-    const prize = Math.floor(Math.random() * 50) + 20;
-    coins += prize;
-    localStorage.setItem("lastClaim", now);
-    alert(`🎁 You found ${prize} coins!`);
-    updateUI();
+function showTab(id) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.getElementById(`tab-${id}`).classList.add('active');
 }
 
-// =========================================
-// 💓 BERSERK EFFECTS
-// =========================================
-const berserkBtn = document.getElementById("berserk");
+// --- BATTLE SYSTEM ---
+function startBattle(mode) {
+    const bet = Math.floor(Number(document.getElementById("bet-input").value));
 
-berserkBtn.addEventListener("mouseenter", () => {
-    sounds.berserkHype.loop = true;
-    sounds.berserkHype.play().catch(() => {});
-    document.body.classList.add("shake-screen");
-});
+    // Validation to prevent NaN errors
+    if (isNaN(bet) || bet <= 0) return alert("Enter a valid bet!");
+    if (coins < bet) return alert("Balance not enough!");
 
-berserkBtn.addEventListener("mouseleave", () => {
-    sounds.berserkHype.pause();
-    sounds.berserkHype.currentTime = 0;
-    document.body.classList.remove("shake-screen");
-});
+    document.getElementById("battle-status").textContent = "Rolling...";
+    sounds.roll.play().catch(() => {});
 
-// =========================================
-// 🎲 BATTLE CORE LOGIC
-// =========================================
-function startBattle(type) {
-    const bet = Number(document.getElementById("bet").value);
-    const resultText = document.querySelector(".result");
-
-    if (bet <= 0 || bet > coins) return alert("Invalid Bet!");
-
-    // Start Roll Visuals & Audio
-    sounds.roll.play();
-    document.getElementById("dice1").classList.add("dice-rolling");
-    document.getElementById("dice2").classList.add("dice-rolling");
-
-    // Artificial delay to let dice "spin"
     setTimeout(() => {
-        document.getElementById("dice1").classList.remove("dice-rolling");
-        document.getElementById("dice2").classList.remove("dice-rolling");
-
-        // Roll Calculation
-        let p1 = (type === 'berserk') ? Math.floor(Math.random() * 12) + 1 : 
-                 (activePowerUp === 'loaded') ? Math.floor(Math.random() * 4) + 3 : Math.floor(Math.random() * 6) + 1;
+        let p1 = (mode === 'bsk') ? Math.floor(Math.random() * 12) + 1 : Math.floor(Math.random() * 6) + 1;
         let p2 = Math.floor(Math.random() * 6) + 1;
 
-        // Update Dice Images (Assuming assets folder exists for images)
+        // Visual dice update
         document.getElementById("dice1").src = `./assets/red-${p1 > 6 ? 6 : p1}.png`;
         document.getElementById("dice2").src = `./assets/green-${p2}.png`;
-        document.getElementById("score1").textContent = p1;
-        document.getElementById("score2").textContent = p2;
 
-        // Reset Visual Glows
-        document.getElementById("p1-card").classList.remove("winner-glow");
-        document.getElementById("p2-card").classList.remove("winner-glow");
-
-        // Logic branching
-        if (type === 'berserk' && p1 <= 3) {
-            coins -= (bet * 2); 
-            p1HP -= 30; 
-            winStreak = 0;
-            resultText.textContent = "💀 BERSERK FAIL!";
-            sounds.lose.play();
-        } else if (p1 > p2) {
-            winStreak++;
-            p2HP -= (p1 - p2) * 10;
-            coins += (winStreak >= 3 ? bet * 2 : bet);
-            resultText.textContent = "VICTORY!";
-            document.getElementById("p1-card").classList.add("winner-glow");
-            playWinSound(winStreak);
-        } else if (p2 > p1) {
-            winStreak = 0;
-            p1HP -= (p2 - p1) * 15;
-            coins -= (activePowerUp === 'shield' ? Math.floor(bet/2) : bet);
-            resultText.textContent = "DEFEAT!";
-            document.getElementById("p2-card").classList.add("winner-glow");
-            sounds.lose.play();
+        if (p1 > p2) {
+            let dmg = 34;
+            // Critical Luck logic
+            if (Math.random() * 100 < upgrades.luck) {
+                dmg = 68;
+                showFloatingText("CRITICAL!", "#fbbf24");
+            }
+            p2HP -= dmg;
+            coins += (bet * upgrades.mult);
+            
+            if (p2HP <= 0) { 
+                sounds.win.play(); 
+                level++; 
+                tokens += 2; 
+                p2HP = 100; 
+                p1HP = upgrades.hp; 
+            }
         } else {
-            resultText.textContent = "DRAW!";
+            p1HP -= 20;
+            coins -= bet;
+            if (p1HP <= 0) { 
+                sounds.lose.play(); 
+                p1HP = upgrades.hp; 
+                p2HP = 100; 
+            }
         }
 
-        // Background Atmosphere based on health/streaks
-        document.body.classList.toggle("bg-hot-streak", winStreak >= 3);
-        document.body.classList.toggle("bg-losing-streak", p1HP < 40);
-
-        activePowerUp = null;
-        checkHP();
         updateUI();
-    }, 800);
+    }, 600);
 }
 
-// =========================================
-// 🏆 HEALTH & LEVELING
-// =========================================
-function checkHP() {
-    if (p2HP <= 0) {
-        p2HP = 100; p1HP = 100;
-        triggerLevelUp();
-    } else if (p1HP <= 0) {
-        alert("You have fainted! Level Progress Reset.");
-        p1HP = 100; p2HP = 100; winStreak = 0;
+// --- PERMANENT SHOP & PRESTIGE ---
+function buyPermanent(type) {
+    const cost = (type === 'hp') ? 10 : 25;
+    
+    if (tokens < cost) return alert("Balance not enough! You need more Tokens.");
+
+    tokens -= cost;
+    if (type === 'hp') {
+        upgrades.hp += 20;
+        p1HP = upgrades.hp;
+    } else if (type === 'luck') {
+        upgrades.luck += 5;
     }
-    
-    // Update HP Bar UI
-    document.getElementById("p1-hp").style.width = p1HP + "%";
-    document.getElementById("p2-hp").style.width = p2HP + "%";
-}
 
-function triggerLevelUp() {
-    currentLevel++;
-    sounds.levelUp.play();
-    document.getElementById("new-lvl").textContent = currentLevel;
-    document.getElementById("celebration-overlay").style.display = "flex";
-}
-
-function closeOverlay() {
-    document.getElementById("celebration-overlay").style.display = "none";
+    saveData();
     updateUI();
 }
 
-// =========================================
-// 🛒 POWER-UPS
-// =========================================
-function buyPowerUp(type) {
-    const cost = type === 'shield' ? 20 : 30;
-    if (coins < cost) return alert("Not enough coins!");
-    coins -= cost; 
-    activePowerUp = type;
-    alert(`${type.toUpperCase()} Activated for next roll!`);
+function handlePrestige() {
+    if (level < 50) return alert("Requirement: Reach LVL 50!");
+    
+    level = 1;
+    upgrades.mult += 0.5;
+    coins = 1000;
+    saveData();
     updateUI();
 }
 
-// =========================================
-// 📊 UI SYNC
-// =========================================
-function updateUI() {
-    document.getElementById("coins").textContent = coins;
-    document.getElementById("coins-game").textContent = coins;
-    document.getElementById("win-streak").textContent = winStreak;
-    document.getElementById("lvl-num").textContent = currentLevel;
-    document.getElementById("multiplier").textContent = winStreak >= 3 ? "2x 🔥" : "1x";
-    
-    // Save state
+function saveData() {
+    localStorage.setItem("upgrades", JSON.stringify(upgrades));
+    localStorage.setItem("tokens", tokens);
     localStorage.setItem("coins", coins);
-    localStorage.setItem("level", currentLevel);
+    localStorage.setItem("level", level);
 }
 
-function logout() {
-    location.reload();
+function setTheme(t) {
+    document.body.className = t;
+    localStorage.setItem("gameTheme", t);
 }
 
-// Event Listeners
-document.getElementById("roll")?.addEventListener("click", () => startBattle('standard'));
-document.getElementById("berserk")?.addEventListener("click", () => startBattle('berserk'));
+function updateUI() {
+    document.getElementById("coins-game").textContent = Math.floor(coins).toLocaleString();
+    document.getElementById("tokens-game").textContent = Math.floor(tokens);
+    document.getElementById("lvl-num").textContent = level;
+    document.getElementById("mult-display").textContent = upgrades.mult;
+    
+    document.getElementById("p1-hp").style.width = (p1HP / upgrades.hp * 100) + "%";
+    document.getElementById("p2-hp").style.width = p2HP + "%";
+    
+    if (p1HP < (upgrades.hp * 0.3) && p1HP > 0) sounds.heartbeat.play().catch(() => {});
+    else sounds.heartbeat.pause();
+    
+    saveData();
+}
 
-// Initial Sync
-updateUI();
+function showFloatingText(txt, clr) {
+    const div = document.createElement("div");
+    div.className = "floating-text";
+    div.textContent = txt;
+    div.style.color = clr;
+    document.body.appendChild(div);
+    setTimeout(() => div.remove(), 1000);
+}
+
+window.onload = () => {
+    document.body.className = localStorage.getItem("gameTheme") || "default";
+};
