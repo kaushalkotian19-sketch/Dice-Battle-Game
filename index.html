@@ -2,104 +2,161 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dice Battle Elite</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Dice Battle">
+    <link rel="apple-touch-icon" href="assets/neon-green-6.png">
+
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="default">
-
-    <div id="home-screen" class="home-container">
-        <div class="dice-icon">🎲</div>
-        <h1 class="main-title">DICE<span>BATTLE</span></h1>
-        <p class="subtitle">ELITE ARENA</p>
+<body>
+    <div id="game-container">
         
-        <div class="login-card glass">
-            <input type="text" id="nickname-input" placeholder="Enter your warrior name..." class="glass-input">
-            <button onclick="enterArena()" class="enter-btn">🚀 ENTER ARENA</button>
-            <p class="server-status">Global Server Online</p>
-        </div>
-        <p class="footer-credit">Developed by Kaushal Kotian</p>
-    </div>
-
-    <nav id="game-nav" class="nav-bar glass" style="display: none;">
-        <button onclick="showTab('arena')">⚔️ Arena</button>
-        <button onclick="showTab('vault')">✨ Vault</button>
-        <button onclick="showTab('hall')">🏆 Hall</button>
-    </nav>
-
-    <main id="game-screen" style="display: none;">
-        <div class="main-scroll-area">
-            
-            <section id="tab-arena" class="tab-content active">
-                <p class="player-tag"><span id="display-username">Warrior</span> LVL <span id="lvl-num">1</span></p>
+        <section id="tab-home" class="tab-content active">
+            <div class="home-container">
+                <h1 class="main-title">DICE BATTLE</h1>
+                <div class="login-card glass">
+                    <button class="enter-btn" onclick="startGame()">ENTER ARENA</button>
+                </div>
                 
+                <div class="developer-credit">
+                    DEVELOPED BY <span class="dev-name">KAUSHAL KOTIAN</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-arena" class="tab-content">
+            <div class="main-scroll-area">
+                <div class="player-info">
+                    <h2 class="player-tag">WARRIOR LVL <span id="lvl-num">1</span></h2>
+                    <div id="prestige-star"></div>
+                </div>
+
                 <div class="battle-arena">
                     <div class="player-box glass">
                         <div class="hp-wrapper"><div id="p1-hp" class="hp-bar"></div></div>
-                        <div class="dice-space"><img src="./assets/red-1.png" id="dice1" alt="Dice 1"></div>
-                        <p>YOU</p>
+                        <div class="dice-space"><img src="assets/red-1.png" id="p1-img" class="dice-img"></div>
+                        <p class="label">YOU</p>
                     </div>
                     <div class="vs-divider">VS</div>
                     <div class="player-box glass">
                         <div class="hp-wrapper"><div id="p2-hp" class="hp-bar"></div></div>
-                        <div class="dice-space"><img src="./assets/green-1.png" id="dice2" alt="Dice 2"></div>
-                        <p>OPPONENT</p>
+                        <div class="dice-space"><img src="assets/green-1.png" id="p2-img" class="dice-img"></div>
+                        <p id="enemy-name" class="label">CPU</p>
                     </div>
                 </div>
 
-                <div class="action-zone glass">
-                    <div class="bet-container">
-                        <input type="number" id="bet-input" value="10" class="glass-input small">
+                <div class="action-zone">
+                    <div class="skills-grid">
+                        <button id="skill-heal" class="skill-btn" onclick="useSkill('heal')">
+                            💚 HEAL<br><span class="skill-cost">50 💰</span>
+                        </button>
+                        <button id="skill-double" class="skill-btn" onclick="useSkill('double')">
+                            ⚔️ 2X DMG<br><span class="skill-cost">100 💰</span>
+                        </button>
                     </div>
-                    <div class="btn-group">
-                        <button onclick="startBattle('std')" class="btn-battle std-premium">🎲 Standard</button>
-                        <button onclick="startBattle('bsk')" class="btn-battle bsk-premium">⚡ Berserk</button>
-                    </div>
-                    <p id="battle-status">Ready to Battle?</p>
+                    
+                    <button class="roll-btn" onclick="rollDice()">ROLL DICE</button>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section id="tab-vault" class="tab-content">
-                <h3>✨ AURA SELECTOR</h3>
-                <div class="aura-grid">
-                    <button class="aura-btn" onclick="setTheme('default')">🌑 Classic</button>
-                    <button class="aura-btn cyber" onclick="setTheme('cyberpunk')">🧬 Cyber</button>
-                    <button class="aura-btn fire" onclick="setTheme('inferno')">🔥 Inferno</button>
+        <section id="tab-vault" class="tab-content">
+            <div class="main-scroll-area">
+                
+                <div class="shop-section glass" style="border-color: #a855f7;">
+                    <h3 style="color: #a855f7;">💎 FREE DIAMONDS</h3>
+                    <button class="up-btn" onclick="showAd()" style="background: rgba(168, 85, 247, 0.2); border-color: #a855f7; color: white; margin-top: 10px;">
+                        📺 WATCH AD (+5 💎)
+                    </button>
                 </div>
 
-                <h3>💎 PERMANENT SHOP</h3>
-                <div class="shop-list">
-                    <div class="upgrade-row glass">
-                        <span>❤️ +20 Max HP</span>
-                        <button class="up-btn" onclick="buyPermanent('hp')">10T</button>
-                    </div>
-                    <div class="upgrade-row glass">
-                        <span>🍀 +5% Crit Luck</span>
-                        <button class="up-btn" onclick="buyPermanent('luck')">25T</button>
-                    </div>
-                    <div class="upgrade-row glass">
-                        <span>👑 Prestige (LVL 50)</span>
-                        <button class="up-btn prestige" onclick="handlePrestige()">RESET</button>
+                <div class="shop-section glass">
+                    <h3>✨ PERMANENT UPGRADES</h3>
+                    <div class="upgrade-grid">
+                        <button class="up-btn" onclick="buyPermanent('hp')">+20 HP (10 💎)</button>
+                        <button class="up-btn" onclick="buyPermanent('luck')">+5% LUCK (25 💎)</button>
                     </div>
                 </div>
-            </section>
 
-            <section id="tab-hall" class="tab-content">
-                <h3>🏆 HALL OF FAME</h3>
-                <div id="leaderboard" class="glass">
-                    <p>Coming Soon...</p>
+                <div class="shop-section glass">
+                    <h3>🎨 DICE SKINS</h3>
+                    <div class="skin-grid">
+                        <button id="skin-classic" class="skin-btn" onclick="buySkin('classic', 0)">CLASSIC</button>
+                        <button id="skin-neon" class="skin-btn" onclick="buySkin('neon', 5000)">NEON (5k 💰)</button>
+                        <button id="skin-forged" class="skin-btn" onclick="buySkin('forged', 10000)">FORGED (10k 💰)</button>
+                        <button id="skin-void" class="skin-btn" onclick="buySkin('void', 25000)">VOID (25k 💰)</button>
+                        <button id="skin-magma" class="skin-btn" onclick="buySkin('magma', 50000)">MAGMA & ICE (50k 💰)</button>
+                        <button id="skin-silver" class="skin-btn" onclick="buySkin('silver', 100000)">ROYAL SILVER (100k 💰)</button>
+                        <button id="skin-gold" class="skin-btn" onclick="buySkin('gold', 500000)">ROYAL GOLD (500k 💰)</button>
+                        <button id="skin-mythic" class="skin-btn" onclick="buySkin('mythic', 1000000)">MYTHIC (1M 💰)</button>
+                    </div>
                 </div>
-            </section>
 
+                <div class="settings-group glass">
+                    <h3>🔊 SYSTEM VOLUME</h3>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5" oninput="adjustVolume()">
+                    <button id="mute-btn" class="glass-btn" style="margin-top: 10px;" onclick="toggleMute()">🔊 Sound On</button>
+                    <button class="prestige-btn" style="margin-top: 10px;" onclick="handlePrestige()">PRESTIGE (LVL 50)</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-hall" class="tab-content">
+            <div class="main-scroll-area">
+                <h2 class="section-title">🏆 HALL OF FAME</h2>
+                <div class="stats-container glass">
+                    <div class="stat-row"><span>BEST RUN</span> <span id="best-run" class="gold-text">1</span></div>
+                    <hr>
+                    <div class="stat-row"><span>TOTAL WINS</span> <span id="total-wins" class="gold-text">0</span></div>
+                </div>
+
+                <h3 style="margin-top: 25px; text-align: center; letter-spacing: 1px;">🎖️ BADGES</h3>
+                <div id="achievements-container" class="achievements-grid">
+                    </div>
+            </div>
+        </section>
+
+        <nav class="nav-bar glass" id="main-nav" style="display:none;">
+            <button onclick="showTab('arena')">⚔️ Arena</button>
+            <button onclick="showTab('vault')">✨ Vault</button>
+            <button onclick="showTab('hall')">🏆 Hall</button>
+        </nav>
+
+        <div class="wallet-bar" id="main-wallet" style="display:none;">
+            <span>💰 <span id="coins-game">0</span></span>
+            <span>💎 <span id="tokens-game">0</span></span>
         </div>
-    </main>
 
-    <div id="wallet" class="wallet-bar glass" style="display: none;">
-        <div class="stat">💰 <span id="coins-game">0</span></div>
-        <div class="stat">🟡 <span id="tokens-game">0</span></div>
-        <div class="stat">✨ <span id="mult-display">1</span>x</div>
+        <div id="daily-reward-modal" class="modal-overlay" style="display: none;">
+            <div class="modal-content glass">
+                <h2>📅 DAILY REWARD</h2>
+                <p style="font-weight: bold; color: rgba(255,255,255,0.7);">Day <span id="streak-day">1</span></p>
+                <div class="reward-box">
+                    <span id="reward-amount">+100 💰</span>
+                </div>
+                <button class="enter-btn" onclick="claimDailyReward()" style="width: 100%; margin-top: 10px;">CLAIM</button>
+            </div>
+        </div>
+
+        <div id="ad-modal" class="modal-overlay" style="display: none; z-index: 3000; background: #050505;">
+            <div style="text-align: center; width: 100%;">
+                <h2 style="color: white; letter-spacing: 2px;">SIMULATED VIDEO AD</h2>
+                <p style="color: rgba(255,255,255,0.5);">Please wait to claim your reward...</p>
+                
+                <div id="ad-timer" style="font-size: 5rem; font-weight: 900; color: #ef4444; margin: 40px 0; text-shadow: 0 0 20px rgba(239, 68, 68, 0.5);">5</div>
+                
+                <button id="ad-close-btn" class="glass-btn" style="display: none; width: 80%; max-width: 300px; margin: 0 auto; border-color: var(--gold); color: var(--gold); font-size: 1.2rem; padding: 15px;" onclick="closeAd()">
+                    CLAIM REWARD 💎
+                </button>
+            </div>
+        </div>
+
     </div>
-
     <script src="main.js"></script>
 </body>
 </html>
