@@ -1,44 +1,42 @@
-const CACHE_NAME = 'dice-battle-v1.2';
+const CACHE_NAME = 'dice-battle-v5.0';
+
 const ASSETS_TO_CACHE = [
-    '/',
-    '/index.html',
-    '/style.css',
-    '/main.js',
-    '/manifest.json'
-    // You can add your asset paths here like '/assets/neon-green-1.png'
-    // to ensure they work fully offline.
+    './',
+    './index.html',
+    './style.css',
+    './main.js',
+    './manifest.json',
+    './assets/red-1.png',
+    './assets/green-1.png'
 ];
 
-// Install Event: Caches core files
-self.addEventListener('install', (event) => {
+// 1. Install & Cache
+self.addEventListener('install', event => {
     event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => {
-            console.log('Opened cache');
-            return cache.addAll(ASSETS_TO_CACHE);
-        })
+        caches.open(CACHE_NAME)
+        .then(cache => cache.addAll(ASSETS_TO_CACHE))
+        .then(() => self.skipWaiting())
     );
 });
 
-// Fetch Event: Serves files from cache if offline
-self.addEventListener('fetch', (event) => {
-    event.respondWith(
-        caches.match(event.request).then((response) => {
-            return response || fetch(event.request);
-        })
-    );
-});
-
-// Activate Event: Cleans up old caches if you update the version
-self.addEventListener('activate', (event) => {
+// 2. Clear Old Caches
+self.addEventListener('activate', event => {
     event.waitUntil(
-        caches.keys().then((cacheNames) => {
+        caches.keys().then(cacheNames => {
             return Promise.all(
-                cacheNames.map((cacheName) => {
-                    if (cacheName !== CACHE_NAME) {
-                        return caches.delete(cacheName);
-                    }
+                cacheNames.map(cache => {
+                    if (cache !== CACHE_NAME) return caches.delete(cache);
                 })
             );
+        })
+    );
+});
+
+// 3. Intercept Fetch (Required for PWA Install Prompt)
+self.addEventListener('fetch', event => {
+    event.respondWith(
+        caches.match(event.request).then(response => {
+            return response || fetch(event.request);
         })
     );
 });
