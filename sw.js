@@ -1,5 +1,5 @@
-// Bumped version number to force browsers to fetch the updated assets
-const CACHE_NAME = 'dice-battle-v5.1';
+// Bumped version to v5.2 to force a fresh install!
+const CACHE_NAME = 'dice-battle-v5.2';
 
 const ASSETS_TO_CACHE = [
     './',
@@ -8,7 +8,7 @@ const ASSETS_TO_CACHE = [
     './main.js',
     './manifest.json',
     './assets/red-dice.png',
-    './assets/Green-dice.png'
+    './assets/green-dice.png' 
 ];
 
 // 1. Install & Cache
@@ -23,7 +23,7 @@ self.addEventListener('install', event => {
     );
 });
 
-// 2. Clear Old Caches (This is crucial for the new images to be recognized)
+// 2. Clear Old Caches
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(cacheNames => {
@@ -39,14 +39,12 @@ self.addEventListener('activate', event => {
     );
 });
 
-// 3. Intercept Fetch (Required for PWA Install Prompt)
+// 3. Intercept Fetch
 self.addEventListener('fetch', event => {
-    // Only intercept basic GET requests to prevent errors with Firebase or external Ads
     if (event.request.method !== 'GET') return;
 
     event.respondWith(
         caches.match(event.request).then(response => {
-            // Return cached version if it exists, otherwise fetch from the network
             return response || fetch(event.request);
         })
     );
