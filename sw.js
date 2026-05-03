@@ -1,5 +1,5 @@
 // Bumped version to v5.2 to force a fresh install!
-const CACHE_NAME = 'dice-battle-v5.2';
+const CACHE_NAME = 'dice-battle-v5.3';
 
 const ASSETS_TO_CACHE = [
     './',
