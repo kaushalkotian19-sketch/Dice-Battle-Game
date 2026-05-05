@@ -424,51 +424,82 @@ function spawnBattleBuff() {
     const existing = document.querySelector('.battle-buff'); 
     if (existing) existing.remove();
     
-    const arena = document.querySelector('.battle-arena'); 
-    if (!arena) return;
-    arena.style.position = 'relative';
+    const targetArea = document.querySelector('.skills-grid'); 
+    if (!targetArea) return;
+    targetArea.style.position = 'relative';
 
     const rand = Math.random() * 100;
 
-    // 💎 VERY RARE: 3% Chance to spawn a floating Diamond
-    if (rand <= 3) {
-        const buffEl = document.createElement('div');
-        buffEl.className = 'battle-buff'; 
-        buffEl.textContent = '💎';
-        
-        let offset = Math.floor(Math.random() * 40) - 20; 
-        buffEl.style.left = `calc(50% - 20px + ${offset}px)`; 
-        buffEl.style.top = '-15px'; 
+    // 48% chance that nothing spawns this turn
+    if (rand > 52) return; 
+
+    const buffEl = document.createElement('div');
+    buffEl.className = 'battle-buff'; 
+    
+    let offset = Math.floor(Math.random() * 20) - 10; 
+    buffEl.style.left = `calc(50% - 20px + ${offset}px)`; 
+    buffEl.style.top = '-45px'; 
+
+    // 🎰 37% CHANCE: THE ROULETTE (Coin vs Bomb)
+    if (rand <= 37) {
+        buffEl.textContent = '🪙';
+        buffEl.dataset.type = 'coin'; 
+
+        // The timer that swaps the icon every 800ms
+        let toggleTimer = setInterval(() => {
+            if (buffEl.dataset.type === 'coin') {
+                buffEl.textContent = '💣';
+                buffEl.dataset.type = 'bomb';
+            } else {
+                buffEl.textContent = '🪙';
+                buffEl.dataset.type = 'coin';
+            }
+        }, 800); 
 
         buffEl.onclick = () => {
-            let diamondAmount = Math.random() > 0.5 ? 2 : 1; 
-            tokens += diamondAmount;
-            if(!isMuted) sounds.win.play().catch(() => {});
-            createDamagePop(`+${diamondAmount} 💎`, 'p1-img', '#a855f7', true);
+            clearInterval(toggleTimer); 
+            
+            if (buffEl.dataset.type === 'coin') {
+                coins += 12; 
+                if(!isMuted) sounds.win.play().catch(() => {});
+                createDamagePop(`+12 💰`, 'main-roll-btn', '#fbbf24', true);
+            } else {
+                coins = Math.max(0, coins - 16); 
+                if(!isMuted) sounds.shatter.play().catch(()=>{}); 
+                document.body.classList.add('violent-shake'); 
+                setTimeout(() => document.body.classList.remove('violent-shake'), 500);
+                createDamagePop(`-16 💰`, 'main-roll-btn', '#ef4444', true);
+            }
+            
             buffEl.remove(); 
             updateUI(); 
         };
-        arena.appendChild(buffEl);
-    }
-    // 🛡️ NORMAL: 15% Chance to spawn a combat buff
-    else if (rand <= 18) {
+    } 
+    // 🛡️ 12% CHANCE: COMBAT BUFFS (38 to 49)
+    else if (rand <= 49) {
         const buff = buffTypes[Math.floor(Math.random() * buffTypes.length)];
-        const buffEl = document.createElement('div');
-        buffEl.className = 'battle-buff'; 
         buffEl.textContent = buff.icon;
-        
-        let offset = Math.floor(Math.random() * 40) - 20; 
-        buffEl.style.left = `calc(50% - 20px + ${offset}px)`; 
-        buffEl.style.top = '-15px'; 
-
         buffEl.onclick = () => {
             nextRollBuff = buff.id; 
             if(!isMuted) sounds.win.play().catch(() => {});
-            createDamagePop(`${buff.text} ACTIVE!`, 'p1-img', buff.color, true);
+            createDamagePop(`${buff.text} ACTIVE!`, 'main-roll-btn', buff.color, true);
             buffEl.remove(); 
         };
-        arena.appendChild(buffEl);
+    } 
+    // 💎 3% CHANCE: DIAMOND JACKPOT (50 to 52)
+    else if (rand <= 52) {
+        buffEl.textContent = '💎';
+        buffEl.onclick = () => {
+            let diamondAmount = Math.random() > 0.5 ? 2 : 1; 
+            tokens += diamondAmount;
+            if(!isMuted) sounds.pulse.play().catch(() => {});
+            createDamagePop(`+${diamondAmount} 💎`, 'main-roll-btn', '#a855f7', true);
+            buffEl.remove(); 
+            updateUI(); 
+        };
     }
+
+    targetArea.appendChild(buffEl);
 }
 
 // --- 🌍 GLOBAL LEADERBOARD LOGIC ---
@@ -680,7 +711,7 @@ window.rollDice = function() {
             if (nextRollBuff === 'strike') { dmg *= 2; }
             
             p2HP -= dmg;
-            let earnedCoins = (10 * upgrades.mult); if (nextRollBuff === 'magnet') { earnedCoins *= 2; }
+            let earnedCoins = (4 * upgrades.mult); if (nextRollBuff === 'magnet') { earnedCoins *= 2; }
             coins += earnedCoins;
 
             if (isCrit) {
@@ -688,6 +719,10 @@ window.rollDice = function() {
                 createDamagePop(`CRIT! -${dmg}`, 'p2-img', '#ef4444', true); if(!isMuted) sounds.pulse.play().catch(() => {}); 
             } else if (usedDoubleSkill) { createDamagePop(`-${dmg}`, 'p2-img', '#fbbf24', false); 
             } else { createDamagePop(dmg, 'p2-img'); }
+            
+            // 🔥 IT ONLY SPAWNS IF YOU WIN NOW!
+            spawnBattleBuff();
+
         } else if (d2 > d1) {
             let dmg = d2 * 5;
             if (nextRollBuff === 'shield') { dmg = 0; createDamagePop("BLOCKED!", 'p1-img', '#3b82f6', true); } 
@@ -702,7 +737,6 @@ window.rollDice = function() {
         triggerBossObstacles(); 
         checkAchievements(); 
         updateUI(); 
-        spawnBattleBuff();
         
         if (!isOverheated) { rollBtn.disabled = false; rollBtn.style.opacity = '1'; }
     }, 400); 
@@ -913,14 +947,23 @@ function updateUI() {
         else { adBtn.innerHTML = `📺 WATCH AD (+5 💎) [${MAX_DAILY_ADS - currentAdCount} LEFT]`; adBtn.style.opacity = '1'; }
     }
     
-    const shareBtn = document.getElementById('share-game-btn');
-    if (shareBtn) {
+    // --- MINI SHARE BUTTON LOGIC ---
+    const miniShareBtn = document.getElementById('mini-share-btn');
+    const miniShareText = document.getElementById('share-mini-text');
+    if (miniShareBtn && miniShareText) {
         const today = new Date().toDateString();
         let currentShareCount = (lastShareDate === today) ? dailySharesCount : 0;
+        
         if (currentShareCount >= MAX_DAILY_SHARES) {
-            shareBtn.innerHTML = `📢 COME BACK TOMORROW`; shareBtn.style.opacity = '0.5';
+            miniShareText.textContent = "MAX";
+            miniShareText.style.color = "rgba(255,255,255,0.5)";
+            miniShareBtn.style.opacity = '0.5';
+            miniShareBtn.style.borderColor = "var(--border)";
         } else {
-            shareBtn.innerHTML = `📢 INVITE FRIENDS (+1 💎) [${MAX_DAILY_SHARES - currentShareCount} LEFT]`; shareBtn.style.opacity = '1';
+            miniShareText.textContent = `+1 💎 (${MAX_DAILY_SHARES - currentShareCount})`;
+            miniShareText.style.color = "#10b981";
+            miniShareBtn.style.opacity = '1';
+            miniShareBtn.style.borderColor = "#10b981";
         }
     }
     
