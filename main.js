@@ -1,3 +1,37 @@
+// --- 🎬 BOOT SEQUENCE (SPLASH SCREENS) ---
+window.addEventListener('load', () => {
+    const studioSplash = document.getElementById('splash-studio');
+    const loadingSplash = document.getElementById('splash-loading');
+
+    // 1. Show NovaForge Studios for 2.5 seconds
+    setTimeout(() => {
+        // Fade out Studio
+        studioSplash.style.opacity = '0';
+        
+        setTimeout(() => {
+            // Remove Studio from DOM, Fade in Loading Screen
+            studioSplash.style.display = 'none';
+            loadingSplash.style.display = 'flex';
+            
+            // Tiny delay to trigger the CSS fade transition
+            setTimeout(() => loadingSplash.style.opacity = '1', 50);
+
+            // 2. Keep Loading Screen up for exactly 5 seconds
+            setTimeout(() => {
+                // Fade out Loading Screen
+                loadingSplash.style.opacity = '0';
+                
+                setTimeout(() => {
+                    // Remove Loading screen, revealing the Main Menu!
+                    loadingSplash.style.display = 'none';
+                }, 500); 
+                
+            }, 5000); 
+
+        }, 500); 
+    }, 2500); 
+});
+
 // --- PWA SERVICE WORKER REGISTRATION ---
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(err => console.log('SW Failed:', err)));
@@ -586,6 +620,7 @@ window.switchLeaderboard = function(type) {
     } else { updateUI(); }
 }
 
+// Reverted to your fully working standard sharing function
 window.shareGame = async function() {
     const today = new Date().toDateString();
     if (lastShareDate !== today) { dailySharesCount = 0; lastShareDate = today; }
